@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Quién paga? Repaso · Ley de Rescate Económico · Finanzas Públicas UdeA</title>
+<meta name="description" content="Aplicativo de repaso de Finanzas Públicas: tributación, incidencia y territorio en la Ley de Rescate Económico.">
+<style>
+  :root{
+    --azul:#2F467A; --azul-claro:#e8ecf5; --azul-medio:#c9d2e6;
+    --rojo:#DC5050; --rojo-claro:#fbeaea;
+    --verde:#3CA05A; --verde-claro:#e7f4eb;
+    --ambar:#c98a12; --ambar-claro:#fbf3e2;
+    --texto:#1f2430; --gris:#6b7280; --linea:#dde1e8; --fondo:#ffffff; --fondo2:#f6f7f9;
+    --radio:8px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--texto);background:var(--fondo);line-height:1.55;font-size:16px}
+  header{background:var(--azul);color:#fff;padding:22px 20px 18px}
+  header .wrap{max-width:1000px;margin:0 auto}
+  header .pre{font-size:13px;opacity:.85;letter-spacing:.02em}
+  header h1{margin:4px 0 2px;font-size:24px;line-height:1.25}
+  header p{margin:2px 0 0;font-size:15px;opacity:.92}
+  nav{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--linea)}
+  nav .wrap{max-width:1000px;margin:0 auto;display:flex;gap:2px;overflow-x:auto;padding:0 12px;scrollbar-width:thin}
+  nav button{flex:0 0 auto;background:none;border:0;border-bottom:3px solid transparent;padding:12px 11px 10px;font:inherit;font-size:14px;color:var(--gris);cursor:pointer;white-space:nowrap}
+  nav button:hover{color:var(--azul)}
+  nav button[aria-selected="true"]{color:var(--azul);border-bottom-color:var(--azul);font-weight:600}
+  main{max-width:1000px;margin:0 auto;padding:22px 20px 60px}
+  section.panel{display:none}
+  section.panel.activo{display:block}
+  h2{color:var(--azul);font-size:22px;margin:4px 0 10px}
+  h3{color:var(--azul);font-size:18px;margin:26px 0 8px}
+  h4{font-size:16px;margin:16px 0 6px}
+  p{margin:8px 0}
+  .lead{font-size:16.5px;color:#333}
+  .muted{color:var(--gris);font-size:14px}
+  .card{border:1px solid var(--linea);border-radius:var(--radio);padding:14px 16px;background:#fff;margin:12px 0}
+  .card.soft{background:var(--fondo2)}
+  .grid{display:grid;gap:12px}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+  .nota{border-left:4px solid var(--ambar);background:var(--ambar-claro);padding:10px 14px;border-radius:0 var(--radio) var(--radio) 0;margin:12px 0;font-size:15px}
+  .nota.azul{border-left-color:var(--azul);background:var(--azul-claro)}
+  .nota.verde{border-left-color:var(--verde);background:var(--verde-claro)}
+  .nota.roja{border-left-color:var(--rojo);background:var(--rojo-claro)}
+  .tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:20px;background:var(--azul-claro);color:var(--azul);margin:2px 4px 2px 0;font-weight:600}
+  .tag.gris{background:#eef0f3;color:#555}
+  button.btn{font:inherit;font-size:14px;border:1px solid var(--azul);background:#fff;color:var(--azul);padding:7px 13px;border-radius:6px;cursor:pointer;margin:4px 6px 4px 0}
+  button.btn:hover{background:var(--azul-claro)}
+  button.btn.prim{background:var(--azul);color:#fff}
+  button.btn.prim:hover{background:#243862}
+  button.opt{display:block;width:100%;text-align:left;font:inherit;font-size:15px;border:1px solid var(--linea);background:#fff;padding:9px 12px;border-radius:6px;margin:6px 0;cursor:pointer;color:var(--texto)}
+  button.opt:hover{border-color:var(--azul)}
+  button.opt.ok{border-color:var(--verde);background:var(--verde-claro)}
+  button.opt.mal{border-color:var(--rojo);background:var(--rojo-claro)}
+  button.opt:disabled{cursor:default}
+  .fb{margin-top:8px;font-size:15px;padding:9px 12px;border-radius:6px;display:none}
+  .fb.show{display:block}
+  .fb.ok{background:var(--verde-claro);border:1px solid #b9dfc5}
+  .fb.mal{background:var(--rojo-claro);border:1px solid #f0c3c3}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;margin:8px 0}
+  th,td{border-bottom:1px solid var(--linea);padding:7px 8px;text-align:left;vertical-align:top}
+  th{color:var(--azul);font-weight:600;background:var(--fondo2)}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .ctrl{margin:10px 0}
+  .ctrl label{display:flex;justify-content:space-between;font-size:14.5px;gap:10px}
+  .ctrl label b{color:var(--azul);font-variant-numeric:tabular-nums}
+  input[type=range]{width:100%;accent-color:var(--azul)}
+  input[type=number],select,input[type=search]{font:inherit;font-size:15px;padding:6px 8px;border:1px solid var(--linea);border-radius:6px;width:100%}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+  .kpi{background:var(--fondo2);border-radius:var(--radio);padding:10px 12px}
+  .kpi .v{font-size:21px;font-weight:700;color:var(--azul);font-variant-numeric:tabular-nums}
+  .kpi .l{font-size:13px;color:var(--gris)}
+  .kpi.r .v{color:var(--rojo)} .kpi.g .v{color:var(--verde)}
+  svg text{font-family:inherit}
+  .chart{width:100%;height:auto;border:1px solid var(--linea);border-radius:var(--radio);background:#fff}
+  .timeline{border-left:3px solid var(--azul-medio);margin:10px 0 10px 8px;padding-left:16px}
+  .timeline .ev{position:relative;margin:0 0 12px}
+  .timeline .ev::before{content:"";position:absolute;left:-23px;top:6px;width:11px;height:11px;border-radius:50%;background:var(--azul)}
+  .timeline .f{font-weight:600;color:var(--azul);font-size:14px}
+  .flujo{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:12px 0}
+  .flujo .paso{flex:1 1 150px;border:1px solid var(--azul-medio);background:var(--azul-claro);border-radius:var(--radio);padding:10px;text-align:center}
+  .flujo .paso b{display:block;color:var(--azul)}
+  .flujo .paso span{font-size:13.5px;color:#444}
+  .flecha{align-self:center;color:var(--azul);font-weight:700}
+  .concepto{border:1px solid var(--linea);border-radius:var(--radio);background:#fff;overflow:hidden}
+  .concepto summary{cursor:pointer;padding:11px 14px;list-style:none;display:flex;justify-content:space-between;gap:10px;align-items:center}
+  .concepto summary::-webkit-details-marker{display:none}
+  .concepto summary .t{font-weight:600;color:var(--azul)}
+  .concepto[open] summary{background:var(--azul-claro)}
+  .concepto .body{padding:6px 14px 12px;font-size:15px}
+  .concepto .body h5{margin:10px 0 2px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--gris)}
+  .dom{font-size:13px;color:var(--gris);display:flex;gap:6px;align-items:center;margin-top:10px}
+  .filtros{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0 12px}
+  .filtros button{font:inherit;font-size:13.5px;border:1px solid var(--linea);background:#fff;padding:5px 11px;border-radius:20px;cursor:pointer}
+  .filtros button.on{background:var(--azul);color:#fff;border-color:var(--azul)}
+  .arbol{border:1px solid var(--linea);border-radius:var(--radio);padding:16px;background:var(--fondo2)}
+  .arbol .q{font-size:17px;font-weight:600;margin-bottom:8px}
+  .arbol .camino{font-size:13.5px;color:var(--gris);margin-bottom:10px}
+  .res{border-radius:var(--radio);padding:12px 14px;margin-top:6px}
+  .res.imp{background:var(--azul-claro)} .res.tasa{background:var(--verde-claro)} .res.cont{background:var(--ambar-claro)} .res.para{background:#efe9f7} .res.no{background:#eef0f3}
+  .caso{border:1px solid var(--linea);border-radius:var(--radio);padding:12px 14px;margin:10px 0;background:#fff}
+  .caso .enun{font-weight:600;margin-bottom:6px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chips button{font:inherit;font-size:13.5px;border:1px solid var(--linea);background:#fff;padding:6px 11px;border-radius:6px;cursor:pointer}
+  .chips button:hover{border-color:var(--azul)}
+  .chips button.ok{background:var(--verde-claro);border-color:var(--verde)}
+  .chips button.mal{background:var(--rojo-claro);border-color:var(--rojo)}
+  .marcador{position:sticky;top:46px;z-index:5;background:#fff;border:1px solid var(--linea);border-radius:var(--radio);padding:8px 12px;display:inline-block;font-size:14px;margin:6px 0}
+  .lista-check label{display:flex;gap:8px;align-items:flex-start;margin:6px 0;font-size:15px}
+  footer{border-top:1px solid var(--linea);color:var(--gris);font-size:13px;padding:18px 20px 30px;max-width:1000px;margin:0 auto}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media (max-width:760px){.two{grid-template-columns:1fr} header h1{font-size:20px}}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .bar{height:16px;border-radius:3px;background:var(--azul)}
+  .barrow{display:grid;grid-template-columns:150px 1fr 70px;gap:8px;align-items:center;font-size:14px;margin:5px 0}
+  .barrow .v{text-align:right;font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="pre">Universidad de Antioquia · Facultad de Derecho y Ciencias Políticas · Finanzas Públicas</div>
+    <h1>¿Quién paga? Repaso de tributación, incidencia y territorio</h1>
+    <p>La Ley de Rescate Económico leída con las herramientas de tributación, incidencia y federalismo fiscal</p>
+  </div>
+</header>
+
+<nav aria-label="Secciones">
+  <div class="wrap" role="tablist" id="tabs">
+    <button role="tab" data-tab="inicio" aria-selected="true">Inicio</button>
+    <button role="tab" data-tab="conceptos">Conceptos</button>
+    <button role="tab" data-tab="clasificar">Clasificar tributos</button>
+    <button role="tab" data-tab="incidencia">Incidencia</button>
+    <button role="tab" data-tab="iva">IVA y EfectIVA</button>
+    <button role="tab" data-tab="renta">Renta</button>
+    <button role="tab" data-tab="nomina">Nómina</button>
+    <button role="tab" data-tab="saludables">Impuestos saludables</button>
+    <button role="tab" data-tab="territorio">Territorio</button>
+    <button role="tab" data-tab="situaciones">Situaciones</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ======================================================= INICIO -->
+<section class="panel activo" id="inicio" role="tabpanel">
+  <h2>Cómo usar este repaso</h2>
+  <p class="lead">Este aplicativo recoge las herramientas de la sesión integrada <em>¿Quién paga y quién decide?</em> aplicadas a la Ley de Rescate Económico. Cada pestaña trabaja un grupo de conceptos con explicaciones, simuladores y casos para practicar.</p>
+
+  <div class="grid g3">
+    <div class="card soft"><b>1. Repasa</b><br><span class="muted">En <em>Conceptos</em> están las fichas, filtradas por tema. Marca las que ya dominas.</span></div>
+    <div class="card soft"><b>2. Practica</b><br><span class="muted">Los simuladores muestran qué cambia cuando mueves elasticidades, tarifas o la factura electrónica.</span></div>
+    <div class="card soft"><b>3. Ponte a prueba</b><br><span class="muted">En <em>Situaciones</em> hay casos para aplicar cada herramienta, con la explicación de la respuesta.</span></div>
+  </div>
+
+  <h3>El hilo de la sesión: el recorrido de un peso</h3>
+  <div class="flujo">
+    <div class="paso"><b>Un hogar o una empresa</b><span>¿quién soporta de verdad la carga?</span></div>
+    <div class="flecha">→</div>
+    <div class="paso"><b>La Nación</b><span>¿con qué principios se reparte?</span></div>
+    <div class="flecha">→</div>
+    <div class="paso"><b>Un municipio o departamento</b><span>¿cuánto se transfiere y con qué regla?</span></div>
+    <div class="flecha">→</div>
+    <div class="paso"><b>Un servicio concreto</b><span>¿quién responde ante el ciudadano?</span></div>
+  </div>
+  <p>Este repaso trabaja sobre todo el primer y el segundo eslabón. La pestaña Territorio ya pisa el tercero, porque el SGP se calcula sobre los ingresos corrientes de la Nación y porque los impuestos al consumo de licores, cerveza y cigarrillos son la base fiscal de los departamentos.</p>
+
+  <h3>El caso en una línea de tiempo</h3>
+  <div class="timeline">
+    <div class="ev"><div class="f">2025</div>El recaudo queda cerca de $9,5 billones por debajo de la meta de la DIAN. El Gobierno Nacional Central cierra con déficit de 6,4 % del PIB.</div>
+    <div class="ev"><div class="f">Noviembre y diciembre de 2025</div>El Congreso hunde la Ley de Financiamiento. El 22 de diciembre se declara la emergencia económica (Decreto Legislativo 1390) y se expiden decretos con medidas tributarias.</div>
+    <div class="ev"><div class="f">9 de abril de 2026</div>La Corte Constitucional declara inexequible la emergencia: los hechos invocados no eran sobrevinientes ni imprevisibles. El hueco fiscal queda intacto.</div>
+    <div class="ev"><div class="f">7 de agosto de 2026</div>Se posesiona el gobierno de Abelardo de la Espriella. El PGN 2027 se expide por decreto. Los intereses de la deuda ($94,4 billones) superan la inversión pública ($86,9 billones).</div>
+    <div class="ev"><div class="f">29 de octubre de 2026</div>Se radica la Ley de Rescate Económico con mensaje de urgencia. Según el Gobierno, el 70 % del esfuerzo está en reducir el gasto.</div>
+    <div class="ev"><div class="f">Noviembre de 2026</div>Comisiones económicas conjuntas y primer debate. Reversazos: se retira el IVA a la canasta familiar, a los agroinsumos y a la medicina prepagada, y la renta de sociedades se mantiene en 35 %.</div>
+  </div>
+
+  <div class="nota">
+    <b>Advertencia de lectura sobre las versiones del proyecto.</b> El material de consulta de la sesión describe el proyecto <em>tal como se radicó</em> (por ejemplo, renta de sociedades bajando a 33 % y 31 %, y sector financiero que hoy paga 40 % bajando hasta 31 %). Después de los reversazos de noviembre, la prensa reporta otra versión (sociedades en 35 %, sector financiero en 38 % en 2027 y 36 % desde 2028). Cuando uses una cifra del proyecto, di de qué versión, de qué fuente y de qué fecha sale, y distingue el dato verificado del dato reportado en prensa.
+  </div>
+
+</section>
+
+<!-- ======================================================= CONCEPTOS -->
+<section class="panel" id="conceptos" role="tabpanel">
+  <h2>Fichas de conceptos</h2>
+  <p>Cada ficha tiene una definición breve, su uso en el caso y una pregunta de control para comprobar que puedes aplicarla. Filtra por tema.</p>
+  <div class="filtros" id="filtrosConceptos"></div>
+  <input type="search" id="buscaConcepto" placeholder="Buscar un concepto (por ejemplo: traslación, Musgrave, tarifa media)" aria-label="Buscar concepto">
+  <p class="muted" id="progresoConceptos" style="margin-top:10px"></p>
+  <div class="grid" id="listaConceptos" style="margin-top:8px"></div>
+</section>
+
+<!-- ======================================================= CLASIFICAR -->
+<section class="panel" id="clasificar" role="tabpanel">
+  <h2>¿Qué clase de cobro es? El árbol de clasificación</h2>
+  <p>La regla de interpretación de Restrepo atraviesa toda esta sección: un tributo se clasifica por su sustancia, mirando el hecho generador descrito en la norma, y el rótulo que le pone la ley no decide su naturaleza. Recorre el árbol con un cobro concreto en mente.</p>
+
+  <div class="arbol" id="arbol"></div>
+
+  <h3>Practica con casos</h3>
+  <p>Clasifica cada cobro. Algunos tienen trampa: el nombre que usa la norma puede llevarte por mal camino.</p>
+  <p class="marcador" id="marcadorCasos">Aciertos: 0 de 0</p>
+  <div id="casosClasificar"></div>
+</section>
+
+<!-- ======================================================= INCIDENCIA -->
+<section class="panel" id="incidencia" role="tabpanel">
+  <h2>Incidencia: entre quien paga por ley y quien soporta el costo</h2>
+  <p>La <b>incidencia legal</b> identifica a quien la ley obliga a pagar. La <b>incidencia económica</b> identifica a quien ve reducido su ingreso real. Entre las dos media la <b>traslación</b>: hacia adelante, cuando el vendedor sube el precio; hacia atrás, cuando el obligado paga menos a trabajadores, proveedores o accionistas.</p>
+
+  <h3>Simulador de un impuesto por unidad</h3>
+  <p class="muted">Arranca con el ejemplo de clase: demanda Q = 100 − 2P y oferta Q = 3P − 50, equilibrio en P = 30 y Q = 40, con un impuesto de 5 por unidad. P está en miles de pesos y Q en miles de unidades. Mueve la sensibilidad de cada lado del mercado al precio.</p>
+
+  <div class="two">
+    <div>
+      <div class="ctrl"><label>Sensibilidad de la demanda al precio <b id="vB">2</b></label><input type="range" id="sB" min="0.5" max="6" step="0.5" value="2"><span class="muted">Valores bajos: compradores que casi no pueden dejar de comprar.</span></div>
+      <div class="ctrl"><label>Sensibilidad de la oferta al precio <b id="vC">3</b></label><input type="range" id="sC" min="0.5" max="6" step="0.5" value="3"><span class="muted">Valores bajos: vendedores que casi no pueden dejar de producir.</span></div>
+      <div class="ctrl"><label>Impuesto por unidad <b id="vT">5</b></label><input type="range" id="sT" min="0" max="10" step="0.5" value="5"></div>
+      <div class="ctrl">
+        <label for="quienLey">¿A quién obliga la ley a pagar?</label>
+        <select id="quienLey"><option value="v">Al vendedor</option><option value="c">Al comprador</option></select>
+      </div>
+      <div>
+        <button class="btn" data-preset="clase">Ejemplo de clase</button>
+        <button class="btn" data-preset="dinel">Demanda muy inelástica</button>
+        <button class="btn" data-preset="oinel">Oferta muy inelástica</button>
+      </div>
+    </div>
+    <div><svg class="chart" id="graficoIncidencia" viewBox="0 0 520 380" role="img" aria-label="Gráfico de oferta y demanda con impuesto"></svg></div>
+  </div>
+  <div class="kpis" id="kpisIncidencia"></div>
+  <div class="nota azul" id="textoIncidencia"></div>
+
+  <h3>Las cuatro proposiciones de Stiglitz</h3>
+  <div class="grid g2">
+    <div class="card"><b>1. La etiqueta legal es indiferente.</b> En un mercado competitivo el resultado es el mismo si la ley obliga al comprador o al vendedor. Compruébalo con el selector del simulador.</div>
+    <div class="card"><b>2. La carga recae sobre el lado menos elástico.</b> Quien tiene menos posibilidades de cambiar su conducta soporta más. La proporción del comprador es la sensibilidad de la oferta dividida por la suma de las dos sensibilidades.</div>
+    <div class="card"><b>3. En monopolio el precio puede subir más que el impuesto.</b> Depende de la forma de la demanda. Restrepo llega a la misma conclusión para el impuesto de sociedades.</div>
+    <div class="card"><b>4. El equilibrio parcial puede engañar.</b> Un impuesto sobre un sector mueve precios en otros sectores y en los mercados de factores. Con capital móvil, la carga tiende a irse hacia factores inmóviles como el trabajo y la tierra.</div>
+  </div>
+
+  <h3>¿Quién paga el impuesto de renta de una sociedad?</h3>
+  <p>Una sociedad es una ficción jurídica: el impuesto lo soportan personas. Hay tres canales y cada uno cambia la lectura distributiva.</p>
+  <div class="grid g3">
+    <div class="card" style="border-color:#b9dfc5"><b>Accionistas</b><br>Si cae la rentabilidad del capital. Como la propiedad accionaria está concentrada en los deciles altos, este canal hace <b>progresivo</b> el impuesto.</div>
+    <div class="card" style="border-color:#f0c3c3"><b>Consumidores</b><br>Si las empresas con poder de mercado trasladan el impuesto a precios. Este canal lo hace <b>regresivo</b>.</div>
+    <div class="card" style="border-color:#f0c3c3"><b>Trabajadores</b><br>Si cae la inversión, el capital por trabajador y con ello los salarios. Gana peso en una economía abierta con capital móvil.</div>
+  </div>
+  <div class="nota">Las estimaciones empíricas varían mucho. Stiglitz, en sus cálculos para Estados Unidos, supone mitad sobre el capital y mitad sobre los consumidores, y advierte que es un supuesto. Esa incertidumbre es la que permite a gobiernos y gremios defender posiciones opuestas con argumentos técnicos, y conviene que tu respuesta la reconozca.</div>
+
+  <h3>Práctica: ¿hacia dónde se traslada?</h3>
+  <div id="practicaTraslacion"></div>
+</section>
+
+<!-- ======================================================= IVA -->
+<section class="panel" id="iva" role="tabpanel">
+  <h2>IVA: regresividad, exenciones y EfectIVA</h2>
+
+  <h3>1. ¿Por qué el IVA pesa más sobre quien gana menos?</h3>
+  <p>El IVA grava el consumo, y la proporción del ingreso que se consume disminuye cuando el ingreso aumenta. El precio que paga el hogar ya incluye el impuesto, de modo que el IVA contenido en una compra gravada al 19 % es el gasto multiplicado por 0,19 y dividido por 1,19.</p>
+  <div class="two">
+    <div class="card">
+      <h4 style="margin-top:0">Hogar A</h4>
+      <div class="ctrl"><label>Ingreso mensual (millones)</label><input type="number" id="aIng" value="2" min="0.1" step="0.1"></div>
+      <div class="ctrl"><label>Parte del ingreso que consume <b id="vACons">100 %</b></label><input type="range" id="aCons" min="10" max="100" step="5" value="100"></div>
+      <div class="ctrl"><label>Parte del consumo gravada al 19 % <b id="vAGrav">50 %</b></label><input type="range" id="aGrav" min="0" max="100" step="5" value="50"></div>
+      <div class="kpis" id="kA"></div>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Hogar B</h4>
+      <div class="ctrl"><label>Ingreso mensual (millones)</label><input type="number" id="bIng" value="20" min="0.1" step="0.5"></div>
+      <div class="ctrl"><label>Parte del ingreso que consume <b id="vBCons">60 %</b></label><input type="range" id="bCons" min="10" max="100" step="5" value="60"></div>
+      <div class="ctrl"><label>Parte del consumo gravada al 19 % <b id="vBGrav">60 %</b></label><input type="range" id="bGrav" min="0" max="100" step="5" value="60"></div>
+      <div class="kpis" id="kB"></div>
+    </div>
+  </div>
+  <div class="nota azul" id="textoHogares"></div>
+  <p class="muted">Valores iniciales tomados del ejemplo resuelto del material de consulta (sección 3.7). Si la comparación se hiciera contra el consumo de toda la vida y no contra el ingreso de un año, el resultado cambiaría; algunos autores defienden esa medida de capacidad.</p>
+
+  <h3>2. La paradoja de las exenciones</h3>
+  <p>Para atenuar la regresividad, la ley excluye o exenta muchos bienes de la canasta. Según Steiner y Cañas (citados por Cárdenas), el 10 % más rico realiza una tercera parte del gasto total en bienes exentos y el 10 % más pobre apenas el 3 %. La exención funciona como un subsidio que se reparte en proporción al consumo.</p>
+  <div class="barrow"><span>Decil más rico</span><div class="bar" style="width:100%"></div><span class="v">33 %</span></div>
+  <div class="barrow"><span>Decil más pobre</span><div class="bar" style="width:9%;background:var(--rojo)"></div><span class="v">3 %</span></div>
+  <div class="card soft" style="margin-top:14px">
+    <b>Ejercicio:</b> una exención le cuesta al fisco $100. Imagina que se elimina y se devuelve una suma en efectivo solo al decil más pobre.
+    <div class="ctrl"><label>Devolución al decil más pobre <b id="vDev">$10</b></label><input type="range" id="sDev" min="0" max="40" step="1" value="10"></div>
+    <div class="kpis" id="kExencion"></div>
+    <p class="muted" id="textoExencion"></p>
+  </div>
+  <div class="nota">El ejemplo funciona con supuestos que conviene hacer explícitos en cualquier análisis, y el material de consulta los enumera en el ejemplo <em>subsidiar por la vía del precio o por la vía de la transferencia</em>. Busca cuáles son.</div>
+
+  <h3>3. Simulador de EfectIVA</h3>
+  <p>EfectIVA grava de manera uniforme y devuelve parte del IVA a los hogares de menores ingresos, calculado sobre las compras registradas en <b>factura electrónica</b>. Según la prensa de noviembre de 2026: 100 % para los deciles 1 a 3, 50 % para el decil 4, 40 % para el decil 5 y 30 % para el decil 6, con un tope mensual cercano a $288.000 por beneficiario (5,5 UVT por persona según el material de consulta).</p>
+  <div class="two">
+    <div>
+      <div class="ctrl"><label for="eDecil">Decil del hogar</label>
+        <select id="eDecil">
+          <option value="1">Decil 1</option><option value="2">Decil 2</option><option value="3">Decil 3</option><option value="4">Decil 4</option><option value="5">Decil 5</option><option value="6">Decil 6</option><option value="7">Decil 7</option><option value="8">Decil 8</option><option value="9">Decil 9</option><option value="10">Decil 10</option>
+        </select></div>
+      <div class="ctrl"><label>Ingreso mensual del hogar</label><input type="number" id="eIng" value="1200000" step="50000" min="0"></div>
+      <div class="ctrl"><label>Compras mensuales gravadas al 19 % (precio final)</label><input type="number" id="eGasto" value="400000" step="10000" min="0"></div>
+      <div class="ctrl"><label>Personas beneficiarias en el hogar</label><input type="number" id="ePers" value="4" step="1" min="1" max="12"></div>
+      <div class="ctrl"><label>Parte de esas compras con factura electrónica <b id="vFact">20 %</b></label><input type="range" id="eFact" min="0" max="100" step="5" value="20"><span class="muted">Tienda del barrio, plaza de mercado y comercio informal rara vez facturan.</span></div>
+    </div>
+    <div>
+      <div class="kpis" id="kEfectiva"></div>
+      <div class="nota azul" id="textoEfectiva"></div>
+    </div>
+  </div>
+  <p class="muted">El simulador es ilustrativo: usa esos porcentajes y supone que todo el IVA facturado del hogar entra al cálculo. El diseño definitivo depende del articulado. Prueba mover la factura electrónica de 20 % a 100 % y cambiar el hogar al decil 7.</p>
+
+  <h4>Las cuatro preguntas de capacidad estatal que deja EfectIVA</h4>
+  <div class="grid g2">
+    <div class="card"><b>Factura electrónica.</b> Si el hogar compra donde no se factura, la devolución queda por debajo del IVA que soporta.</div>
+    <div class="card"><b>Focalización.</b> Depende de la calidad y la actualización del Sisbén.</div>
+    <div class="card"><b>Credibilidad.</b> El hogar paga el IVA hoy y recibe la devolución después.</div>
+    <div class="card"><b>Ingresos medios.</b> Quedan fuera de la compensación y soportan completo el aumento. Son numerosos y votan.</div>
+  </div>
+</section>
+
+<!-- ======================================================= RENTA -->
+<section class="panel" id="renta" role="tabpanel">
+  <h2>Renta: tarifa media, tarifa marginal y la anomalía colombiana</h2>
+  <p>Un impuesto es <b>progresivo</b> cuando la tarifa media (impuesto pagado dividido por el ingreso) aumenta con el ingreso, <b>proporcional</b> cuando se mantiene y <b>regresivo</b> cuando disminuye. La <b>tarifa marginal</b> es la que se aplica al último peso ganado. Nadie paga su tarifa marginal sobre todo su ingreso: es la confusión más frecuente del debate público.</p>
+
+  <h3>Calculadora: tabla vigente y tabla propuesta</h3>
+  <div class="two">
+    <div>
+      <div class="ctrl"><label>Renta líquida gravable anual <b id="vRenta">$100 millones</b></label><input type="range" id="sRenta" min="0" max="2500" step="5" value="100"></div>
+      <input type="number" id="nRenta" value="100" min="0" step="1" aria-label="Renta en millones">
+      <p class="muted">En millones de pesos. UVT de 2026: $52.374.</p>
+      <table id="tablaRenta"></table>
+    </div>
+    <div><svg class="chart" id="graficoRenta" viewBox="0 0 520 340" role="img" aria-label="Tarifa media según ingreso"></svg>
+      <p class="muted">Líneas: tarifa media con la tabla vigente (azul) y con la propuesta (rojo), entre $0 y $1.000 millones.</p></div>
+  </div>
+  <div class="nota">La tabla propuesta (0 % hasta $37,7 millones, tramo nuevo de 9 % hasta $57,1 millones y 39 % desde $454,1 millones, sin los tramos de 35 % y 37 %) se toma del material de consulta, que a su vez la toma de la prensa especializada. Dos cautelas: la renta gravable se obtiene después de restar ingresos no constitutivos de renta, rentas exentas y deducciones, que el proyecto también modifica; y el cálculo supone que la nueva tabla opera por tramos marginales, como la vigente. Ojo con una frase frecuente: la tarifa marginal máxima ya era 39 %; lo que cambia es el punto desde el cual se aplica.</div>
+
+  <h3>La anomalía colombiana</h3>
+  <p>Con datos de la OCDE para 2017 (Cárdenas), en Colombia las empresas pagaron cerca de cuatro veces lo que pagaron las personas en impuesto de renta. En el promedio de la OCDE ocurre lo contrario: las personas pagan unas 2,8 veces lo que pagan las empresas.</p>
+  <div class="two">
+    <div class="card">
+      <b>Colombia</b>
+      <div class="barrow"><span>Empresas</span><div class="bar" style="width:100%"></div><span class="v">4</span></div>
+      <div class="barrow"><span>Personas</span><div class="bar" style="width:25%;background:var(--azul-medio)"></div><span class="v">1</span></div>
+    </div>
+    <div class="card">
+      <b>Promedio OCDE</b>
+      <div class="barrow"><span>Empresas</span><div class="bar" style="width:35.7%"></div><span class="v">1</span></div>
+      <div class="barrow"><span>Personas</span><div class="bar" style="width:100%;background:var(--azul-medio)"></div><span class="v">2,8</span></div>
+    </div>
+  </div>
+
+  <div class="card soft">
+    <b>Laboratorio de proporciones.</b> Mueve cuánto cambia el recaudo de renta de cada grupo frente a hoy (1 = igual que hoy) y mira cómo se mueve la proporción. Es aritmética mecánica: ignora la incidencia y los efectos de comportamiento.
+    <div class="ctrl"><label>Recaudo de las empresas frente a hoy <b id="vMEmp">1,0 veces</b></label><input type="range" id="sMEmp" min="0.5" max="1.5" step="0.05" value="1"></div>
+    <div class="ctrl"><label>Recaudo de las personas frente a hoy <b id="vMPer">1,0 veces</b></label><input type="range" id="sMPer" min="1" max="15" step="0.5" value="1"></div>
+    <div class="kpis" id="kAnomalia"></div>
+    <p class="muted" id="textoAnomalia"></p>
+  </div>
+
+  <h4>Tres explicaciones de la anomalía</h4>
+  <div class="grid g3">
+    <div class="card"><b>Administrativa.</b> Es más fácil cobrar a unas miles de empresas con contabilidad y revisor fiscal que a millones de personas con ingresos informales o difíciles de verificar.</div>
+    <div class="card"><b>Economía política.</b> Las personas de altos ingresos han logrado rentas exentas, deducciones y tratamiento favorable a dividendos; gravar a las de ingresos medios tiene alto costo político.</div>
+    <div class="card"><b>Incidencia.</b> Si el impuesto de las empresas se traslada a precios, salarios o accionistas, la anomalía es en parte aparente: las personas pagan por la vía de las empresas.</div>
+  </div>
+
+  <h4>Datos de la base de personas que puedes usar</h4>
+  <table>
+    <tr><th>Dato</th><th>Valor</th><th>Fuente en el material</th></tr>
+    <tr><td>Renta de personas naturales</td><td>0,2 % del PIB en 1990; 1,2 % en 2017</td><td>Cárdenas</td></tr>
+    <tr><td>Declarantes</td><td>2,9 millones en 2018; 6,5 millones en la temporada 2025</td><td>DIAN, en notas de las diapositivas</td></tr>
+    <tr><td>Tarifa efectiva del 1 % más rico</td><td>12 %</td><td>Alvaredo y Londoño</td></tr>
+    <tr><td>Tarifa efectiva del 0,01 % más rico</td><td>8 %</td><td>Alvaredo y Londoño</td></tr>
+    <tr><td>Tributación efectiva promedio sobre ingresos del trabajo</td><td>22,5 %</td><td>Alvaredo y Londoño</td></tr>
+    <tr><td>Retención mensual de un asalariado de $5 millones</td><td>$4.649 hoy; $161.771 con la propuesta</td><td>Prensa, en el material de consulta</td></tr>
+  </table>
+</section>
+
+<!-- ======================================================= NOMINA -->
+<section class="panel" id="nomina" role="tabpanel">
+  <h2>Nómina: el aporte del empleador y sus tres destinos</h2>
+  <p>El mismo razonamiento de la incidencia se aplica al mercado de trabajo, donde el precio es el salario. Cuando la ley impone un aporte al empleador, el mayor costo laboral puede terminar en tres lugares.</p>
+  <div class="grid g3">
+    <div class="card"><b>Absorción.</b> El empleador asume el costo: el salario no cambia, el costo laboral sube y la utilidad baja.</div>
+    <div class="card"><b>Traslación al salario.</b> Con el tiempo los aumentos salariales son menores hasta que el costo total vuelve a acercarse al inicial. El trabajador soporta la carga aunque la ley diga que la paga el empleador.</div>
+    <div class="card"><b>Traslación al empleo.</b> Si el salario no puede bajar, por ejemplo porque está en el mínimo legal, el ajuste llega por menos empleo formal o más informalidad.</div>
+  </div>
+
+  <h3>Simulador</h3>
+  <div class="two">
+    <div>
+      <div class="ctrl"><label>Salario mensual del trabajador</label><input type="number" id="nSal" value="2000000" step="50000" min="0"></div>
+      <div class="ctrl"><label>Aporte nuevo del empleador sobre la nómina <b id="vTau">13,5 %</b></label><input type="range" id="sTau" min="0" max="15" step="0.5" value="13.5"><span class="muted">13,5 puntos: salud, SENA e ICBF del ejemplo de clase. La versión de noviembre del proyecto habla de 4 % de cotización patronal a salud para quienes ganan entre dos y tres salarios mínimos.</span></div>
+      <div class="ctrl"><label for="nEsc">Escenario</label>
+        <select id="nEsc"><option value="abs">Absorción por el empleador</option><option value="sal" selected>Traslación al salario</option><option value="emp">Traslación al empleo (salario en el piso legal)</option></select></div>
+      <div class="ctrl" id="ctrlEta"><label>Sensibilidad de la demanda de trabajo al costo laboral <b id="vEta">0,5</b></label><input type="range" id="sEta" min="0" max="2" step="0.1" value="0.5"></div>
+      <div class="ctrl"><label>Trabajadores formales en la empresa</label><input type="number" id="nTrab" value="100" min="1" step="1"></div>
+    </div>
+    <div><div class="kpis" id="kNomina"></div><div class="nota azul" id="textoNomina"></div></div>
+  </div>
+  <div class="nota">El ejemplo de clase: con salario de $2 millones y 13,5 puntos de aporte, el costo de contratar sube a $2,27 millones; si la oferta de trabajo es poco elástica, el salario bruto tiende a bajar hacia $1,76 millones. El simulador de empleo es ilustrativo y supone una sensibilidad constante de la demanda de trabajo.</div>
+
+  <h3>Lo que la nómina tiene de particular en Colombia</h3>
+  <ul>
+    <li>Para una gran parte de los trabajadores el salario lo fija el mínimo legal y no puede bajar. Por eso los impuestos a la nómina se discuten en el país como un problema de empleo además de equidad.</li>
+    <li>La exoneración de 2012 (Ley 1607, luego Ley 1819 de 2016) liberó a las sociedades de 13,5 puntos de aportes por trabajadores de menos de diez salarios mínimos y trasladó carga de la nómina a las utilidades, con la intención declarada de abaratar el empleo formal.</li>
+    <li>Los umbrales de dos y tres salarios mínimos crean incentivos a fijar salarios justo por debajo de ellos.</li>
+    <li>Las cotizaciones son invisibles en las cuentas de la DIAN: el trabajador ve su propio descuento y no ve el aporte del empleador. Eso es ilusión fiscal.</li>
+  </ul>
+</section>
+
+<!-- ======================================================= SALUDABLES -->
+<section class="panel" id="saludables" role="tabpanel">
+  <h2>Impuestos saludables: fin extrafiscal y la paradoja del tabaco</h2>
+  <p>Un tributo tiene <b>fin fiscal</b> cuando su propósito principal es recaudar y <b>fin extrafiscal</b> cuando busca, además o sobre todo, modificar conductas. Un impuesto extrafiscal que funciona bien erosiona su propia base: si logra que se consuma menos, la cantidad gravada cae y el recaudo, después de un primer aumento, tiende a bajar.</p>
+
+  <h3>Simulador de la paradoja</h3>
+  <p class="muted">Ejemplo de clase: 10 millones de cajetillas al año, precio de $10.000, impuesto de $2.000 por cajetilla, recaudo de $20.000 millones. El simulador supone que el impuesto se traslada completo al precio.</p>
+  <div class="two">
+    <div>
+      <div class="ctrl"><label>Nuevo impuesto por cajetilla <b id="vImp">$4.000</b></label><input type="range" id="sImp" min="2000" max="8000" step="250" value="4000"></div>
+      <div class="ctrl"><label>Respuesta de los consumidores al precio (elasticidad, en valor absoluto) <b id="vEps">0,58</b></label><input type="range" id="sEps" min="0" max="6" step="0.01" value="0.58"></div>
+      <div>
+        <button class="btn" data-eps="0.58">Responden poco (clase: 9 millones)</button>
+        <button class="btn" data-eps="5.03">Responden mucho (clase: 4 millones)</button>
+      </div>
+      <div class="kpis" id="kTabaco"></div>
+    </div>
+    <div><svg class="chart" id="graficoTabaco" viewBox="0 0 520 330" role="img" aria-label="Recaudo según el impuesto"></svg>
+      <p class="muted">Curva: recaudo según el impuesto para la elasticidad elegida. Línea punteada: recaudo inicial de $20.000 millones.</p></div>
+  </div>
+  <div class="nota azul" id="textoTabaco"></div>
+  <div class="nota">Dos elementos que la respuesta completa debe mencionar. El <b>contrabando</b> crece cuando el diferencial de precios con el mercado ilegal se amplía, y reduce a la vez el recaudo y el efecto sanitario. Y en Colombia quien sufre la caída de esa base es el <b>departamento</b>, porque los impuestos al consumo de licores, cerveza y cigarrillos son suyos.</div>
+
+  <h3>Para pensar el caso de los sustitutos</h3>
+  <div class="card soft">
+    <p>La lógica del instrumento sirve para cualquier bien gravado con fin extrafiscal. Para analizar el caso de las bebidas con edulcorantes no calóricos, conviene hacerse estas preguntas, sin dar por sentados efectos sanitarios que no estén respaldados por una fuente:</p>
+    <ul>
+      <li>¿Qué conducta quiere modificar un impuesto a las bebidas azucaradas, y hacia dónde se espera que se muevan los consumidores?</li>
+      <li>Si el sustituto también se grava, ¿qué pasa con ese movimiento?</li>
+      <li>El Gobierno estima un recaudo de $1,8 billones en 2028 para la nueva base. ¿Qué supone esa estimación sobre cuánto caerá el consumo?</li>
+      <li>Con eso, ¿el fin dominante de esta medida parece fiscal o extrafiscal? ¿Qué información haría falta para afirmarlo con seguridad?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ======================================================= TERRITORIO -->
+<section class="panel" id="territorio" role="tabpanel">
+  <h2>La Ley de Rescate y el territorio</h2>
+  <p>Una reforma tributaria nacional también es una reforma territorial, por dos vías que el material de consulta subraya. El SGP se calcula sobre los ingresos corrientes de la Nación, de modo que lo que se decida sobre renta e IVA cambia, con rezago, lo que reciben municipios y departamentos. Y los impuestos al consumo de licores, cerveza y cigarrillos, que la Ley de Rescate quiere elevar por razones de salud, son la base fiscal de los departamentos.</p>
+
+  <h3>Musgrave: ¿qué nivel de gobierno debería hacerlo?</h3>
+  <p>La teoría asigna la <b>estabilización</b> y la <b>distribución</b> principalmente a la Nación y deja la <b>asignación</b> de bienes con beneficio local a los territorios. Ubica cada tarea.</p>
+  <p class="marcador" id="marcadorMusgrave">Aciertos: 0 de 0</p>
+  <div id="juegoMusgrave"></div>
+
+  <h3>Las dos brechas</h3>
+  <div class="grid g2">
+    <div class="card"><b>Brecha vertical.</b> El centro concentra el mayor poder de recaudo y los territorios ejecutan una parte grande del gasto. Los impuestos más elásticos (renta, IVA, aduanas) tienen bases móviles y quedaron arriba; abajo quedaron la propiedad raíz, la industria y el comercio local y el consumo de licores.</div>
+    <div class="card"><b>Brecha horizontal.</b> Entidades del mismo nivel tienen capacidades muy distintas de generar recursos propios: Bogotá o Medellín financian con predial e ICA buena parte de su gasto; un municipio de sexta categoría del Chocó no puede.</div>
+  </div>
+
+  <h3>Base gravable compartida</h3>
+  <p>Cuando dos niveles de gobierno obtienen recursos de la misma base económica, una decisión de uno cambia el recaudo del otro. El consumo de licores, cerveza y cigarrillos es el ejemplo más claro del caso: la ley nacional fija las tarifas y la Ley de Rescate propone elevarlas por razones de salud, mientras el recaudo lo reciben los departamentos. Algo parecido ocurre con los ingresos corrientes de la Nación, que son a la vez la base de las finanzas nacionales y el denominador sobre el que se calcula el SGP.</p>
+
+  <h3>Composición del recaudo departamental (2025)</h3>
+  <div id="barrasDeptos"></div>
+  <p class="muted">Fuente: Marco Fiscal de Mediano Plazo 2026, citado en el material de consulta. Las cuatro fuentes ligadas al consumo (cerveza, licores, tabaco y monopolio de licores) suman 44,1 % y sus tarifas las fija el Congreso.</p>
+
+  <h3>Simulador: ¿qué pasa con la dependencia de un departamento?</h3>
+  <p class="muted">Parte de un departamento con la estructura agregada de 2025: de cada $100 de ingresos, $56,9 son transferencias, $26,6 impuestos y $16,3 otros ingresos. De los impuestos, el 44,1 % viene de fuentes ligadas al consumo.</p>
+  <div class="two">
+    <div>
+      <div class="ctrl"><label>Cambio en el recaudo ligado al consumo <b id="vCons">0 %</b></label><input type="range" id="sCons" min="-60" max="60" step="5" value="0"><span class="muted">Negativo si el consumo cae más de lo que suben las tarifas; positivo si ocurre lo contrario.</span></div>
+      <div class="ctrl"><label>Cambio en las transferencias <b id="vTransf">0 %</b></label><input type="range" id="sTransf" min="-10" max="20" step="1" value="0"><span class="muted">El SGP crece con el promedio de los ingresos corrientes de los cuatro años anteriores.</span></div>
+    </div>
+    <div><div class="kpis" id="kDepto"></div></div>
+  </div>
+  <div class="nota azul" id="textoDepto"></div>
+
+  <h3>Incentivos de las transferencias</h3>
+  <div class="grid g2">
+    <div class="card"><b>Pereza fiscal.</b> Si la plata llega automática y creciente, cobrar impuestos propios solo tiene costo político para el gobernante local. La evidencia colombiana es mixta: García Garzón encuentra que los ingresos tributarios territoriales subieron de 2,3 % a 3,2 % del PIB entre 2000 y 2017.</div>
+    <div class="card"><b>Papel matamoscas.</b> El dinero se queda pegado donde cae: una transferencia a la alcaldía aumenta el gasto local mucho más que una rebaja de impuestos de igual monto a los residentes.</div>
+    <div class="card"><b>Principio de correspondencia.</b> Quien decide y financia un bien público debería coincidir con quien se beneficia de él (Olson lo llamó equivalencia fiscal). Si el beneficio se desborda, el municipio invierte menos de lo necesario.</div>
+    <div class="card"><b>Péndulo colombiano.</b> Los movimientos hacia el centro nacieron de crisis fiscales; los movimientos hacia el territorio, de demandas regionales. Una crisis fiscal como la de 2025 y 2026 es el tipo de contexto que históricamente empuja hacia el centro.</div>
+  </div>
+</section>
+
+<!-- ======================================================= SITUACIONES -->
+<section class="panel" id="situaciones" role="tabpanel">
+  <h2>Situaciones para practicar</h2>
+  <p>Cada situación pide aplicar una herramienta. Elige la respuesta y lee la explicación, también cuando aciertes: ahí está el argumento.</p>
+  <p class="marcador" id="marcadorQuiz">Respondidas: 0 · Aciertos: 0</p>
+  <div><button class="btn" id="reiniciarQuiz">Reiniciar</button></div>
+  <div id="quiz"></div>
+</section>
+
+</main>
+
+<footer>
+  Material de repaso elaborado a partir del material de consulta y la presentación de la sesión integrada <em>¿Quién paga y quién decide?</em>. Fuentes de base: Restrepo (2015), Stiglitz, Cárdenas (2020), García Garzón (2020), Ricciulli-Marín, Bonet-Morón y Pérez-Valbuena (2023) y Marco Fiscal de Mediano Plazo 2026. Las cifras de la Ley de Rescate cambian en cada debate: verifícalas en la ponencia más reciente antes de usarlas.<br>
+  Finanzas Públicas · Universidad de Antioquia · S. Emilio Henao-Bedoya
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------------- utilidades ---------------- */
+var nf1 = new Intl.NumberFormat('es-CO',{maximumFractionDigits:1, minimumFractionDigits:1});
+var nf0 = new Intl.NumberFormat('es-CO',{maximumFractionDigits:0});
+var nf2 = new Intl.NumberFormat('es-CO',{maximumFractionDigits:2});
+function $(id){return document.getElementById(id);}
+function pesos(x){return '$' + nf0.format(Math.round(x));}
+function pct(x){return nf1.format(x) + ' %';}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function cambio(x,d){var f=d?nf1:nf0;if(Math.abs(x)<0.05)return 'sin cambio';return (x>0?'sube ':'cae ')+f.format(Math.abs(x))+' %';}
+function kpi(v,l,cls){return '<div class="kpi '+(cls||'')+'"><div class="v">'+v+'</div><div class="l">'+l+'</div></div>';}
+var SVGNS='http://www.w3.org/2000/svg';
+function S(tag,attrs,txt){var e=document.createElementNS(SVGNS,tag);for(var k in attrs){e.setAttribute(k,attrs[k]);}if(txt!==undefined){e.textContent=txt;}return e;}
+var store = {
+  get:function(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},
+  set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+};
+
+/* ---------------- pestañas ---------------- */
+var botones = document.querySelectorAll('#tabs button');
+function abrir(id){
+  if(!$(id)) id='inicio';
+  document.querySelectorAll('section.panel').forEach(function(p){p.classList.toggle('activo',p.id===id);});
+  botones.forEach(function(b){b.setAttribute('aria-selected', b.getAttribute('data-tab')===id ? 'true':'false');});
+  if(location.hash.slice(1)!==id){history.replaceState(null,'','#'+id);}
+  window.scrollTo(0,0);
+}
+botones.forEach(function(b){b.addEventListener('click',function(){abrir(b.getAttribute('data-tab'));});});
+window.addEventListener('hashchange',function(){abrir(location.hash.slice(1));});
+
+/* ---------------- conceptos ---------------- */
+var CONCEPTOS = [
+ {t:'Clasificación de Ataliba: tributos vinculados y no vinculados', b:['B1','B3'], f:'Material de consulta, sección 2.3; diapositivas, sesión 6',
+  d:'Clasifica cualquier cobro con una sola pregunta sobre el hecho generador: ¿incluye una actuación del Estado referida a quien paga? Si la incluye, el tributo es vinculado: tasa, cuando la actuación es un servicio individualizado, o contribución especial, cuando es una obra o actividad que beneficia a un grupo. Si el hecho generador consiste solo en un hecho del contribuyente (obtener renta, vender, poseer), el tributo es no vinculado y su caso típico es el impuesto.',
+  c:'Es la herramienta para determinar la naturaleza jurídica de la cotización a salud y para revisar cualquier cobro nuevo del proyecto. Se aplica mirando solo lo que describe la norma, sin especular sobre intenciones del legislador.',
+  q:'Si una norma dice que se paga por comprar una bebida con edulcorante, ¿qué actuación estatal aparece en el hecho generador?'},
+ {t:'Especies tributarias', b:['B3'], f:'Material de consulta, sección 2.4',
+  d:'Impuesto: nace de un hecho del contribuyente que revela capacidad económica y no tiene contraprestación individual. Tasa: remunera un servicio estatal individualizado y debe guardar razonable equivalencia con su costo. Contribución especial: la pagan quienes reciben un beneficio diferencial de una obra, como la valorización. Contribución parafiscal: pago obligatorio que la ley impone a un sector definido y que se reinvierte en ese sector, como la contribución cafetera, los aportes al SENA y al ICBF y las cotizaciones.',
+  c:'La jurisprudencia ha tratado las cotizaciones a salud como recursos parafiscales. Económicamente, sin embargo, se comportan como un impuesto a la nómina.',
+  q:'¿Por qué la tasa es la única especie que admite algo de voluntariedad, y en qué consiste esa voluntariedad?'},
+ {t:'Impuestos directos e indirectos', b:['B1'], f:'Material de consulta, sección 2.6; diapositivas, sesión 6',
+  d:'La clasificación usa tres criterios que no siempre coinciden. Administrativo: registro nominativo frente a operación anónima. Traslación legal: a quién pretende la ley que recaiga. Capacidad gravada: renta y patrimonio frente a consumo. El segundo criterio es el más frágil, porque la ley declara quién paga y la economía decide quién soporta.',
+  c:'El IVA es indirecto; la renta de sociedades es directa según la ley y aun así puede trasladarse a precios o salarios. La clasificación describe; para concluir algo sobre equidad hace falta la incidencia.',
+  q:'Si la ley dice que el impuesto de renta de un banco es directo, ¿eso garantiza que lo paguen los accionistas?'},
+ {t:'Fin fiscal y fin extrafiscal', b:['B3'], f:'Material de consulta, sección 2.7; diapositivas, sesión 6',
+  d:'Un tributo tiene fin fiscal cuando su propósito principal es recaudar, y extrafiscal cuando busca, además o sobre todo, modificar conductas: desestimular el tabaco o el alcohol, proteger una industria, reducir emisiones. La categoría es móvil: el arancel nació como protección y con la apertura pasó a ser sobre todo recaudo.',
+  c:'Los impuestos saludables de la Ley 2277 de 2022 que la Ley de Rescate mantiene y amplía tienen fin extrafiscal declarado, y al mismo tiempo el Gobierno cuenta con ellos como fuente de ingreso.',
+  q:'¿Qué dato del proyecto te permitiría sospechar que una medida extrafiscal tiene, en la práctica, un fin fiscal dominante?'},
+ {t:'Paradoja del tabaco', b:['B3','B4'], f:'Material de consulta, sección 2.7; diapositivas, sesión 6',
+  d:'Un impuesto extrafiscal exitoso destruye su propia base. Si el gravamen logra que se consuma menos, la cantidad gravada cae y el recaudo, después de un primer aumento, tiende a bajar. Hay un rango en el que se obtiene más recaudo y menos consumo a la vez; saber dónde se está exige estimar la elasticidad de la demanda. El contrabando reduce a la vez recaudo y efecto sanitario.',
+  c:'Se aplica a licores, cerveza, cigarrillos, vapeadores, bebidas azucaradas y edulcorantes. Reaparece en el territorio: esos consumos son la base de los departamentos.',
+  q:'A un gobierno que necesita recaudo y justifica el impuesto por salud, ¿qué le conviene que pase con el consumo?'},
+ {t:'Equidad horizontal', b:['B1','B2'], f:'Material de consulta, sección 3.4; Stiglitz, cap. 17',
+  d:'Personas en situaciones económicas iguales deben pagar impuestos iguales. Se rompe cuando dos personas con el mismo ingreso pagan montos distintos porque una lo recibe como salario y otra como dividendos, o porque una accede a un beneficio tributario que la otra no conoce o no puede usar.',
+  c:'Todo beneficio tributario rompe la equidad horizontal, cualquiera que sea su motivación. Por eso la Ley 819 de 2003 obliga a estimar cada año el costo fiscal de los beneficios.',
+  q:'Dos hogares con el mismo ingreso compran la misma canasta, uno en un supermercado con factura y otro en la tienda del barrio. Con EfectIVA, ¿reciben el mismo trato?'},
+ {t:'Equidad vertical', b:['B1','B2'], f:'Material de consulta, sección 3.4; Stiglitz, cap. 17',
+  d:'Quienes tienen mayor capacidad de pago deben aportar más. La dificultad está en definir cuánto más, y ahí la economía remite a la filosofía política: el criterio utilitarista justifica impuestos crecientes con el ingreso, moderados por los incentivos; el rawlsiano maximiza el bienestar de quien está peor y lleva a una redistribución más intensa.',
+  c:'Sirve para evaluar si un mecanismo trata mejor a quien tiene menos capacidad: exenciones generales frente a devoluciones focalizadas, tramos nuevos en la renta.',
+  q:'Una exención beneficia más en pesos al decil 10 que al decil 1. ¿Viola la equidad vertical aunque baje los precios para todos?'},
+ {t:'Progresividad, proporcionalidad y regresividad', b:['B1','B2'], f:'Material de consulta, sección 3.5; diapositivas, sesiones 6 y 7',
+  d:'Un impuesto es progresivo si la tarifa media (impuesto dividido por ingreso) crece con el ingreso, proporcional si se mantiene y regresivo si disminuye. La Corte Constitucional sostiene que los principios del artículo 363 se predican del sistema tributario en su conjunto y no de cada impuesto: el IVA puede ser regresivo sin ser inconstitucional.',
+  c:'El debate sobre justicia tributaria de la Ley de Rescate se juzga sobre la combinación de medidas: más renta de personas, cambios en IVA, compensación focalizada.',
+  q:'¿Por qué es difícil demandar un impuesto ante la Corte solo por ser regresivo?'},
+ {t:'Tarifa marginal y tarifa media', b:['B2'], f:'Material de consulta, sección 3.5',
+  d:'La tarifa marginal se aplica al último peso ganado; la tarifa media es lo pagado dividido por el ingreso. Con la tabla vigente, alguien con renta gravable de $100 millones tiene tarifa marginal de 28 % y tarifa media de 9,1 %.',
+  c:'El tramo nuevo de 9 % y la baja del umbral cuadruplican la tarifa media del contribuyente de $60 millones, aunque en pesos el aumento sea modesto.',
+  q:'Si alguien dice que con la reforma pagará el 39 % de lo que gana, ¿qué le responderías?'},
+ {t:'Incidencia legal e incidencia económica', b:['B1','B2','B3'], f:'Material de consulta, sección 3.9; Stiglitz, cap. 18',
+  d:'La incidencia legal identifica a quien la ley obliga a pagar. La incidencia económica identifica a quien ve reducido su ingreso real cuando precios, salarios y rentabilidades se ajustan. La distancia entre las dos es la traslación.',
+  c:'Para cada medida del proyecto conviene llenar dos columnas: a quién obliga la ley y quién termina soportando el costo.',
+  q:'¿Quién es el obligado legal del IVA y quién lo soporta en bienes de demanda poco elástica?'},
+ {t:'Traslación y elasticidades', b:['B1','B2','B3'], f:'Material de consulta, sección 3.9; Stiglitz, cap. 18',
+  d:'La traslación hacia adelante pasa la carga al comprador por la vía del precio; hacia atrás, a trabajadores, proveedores o accionistas. Cuatro proposiciones: la etiqueta legal es indiferente; la carga recae sobre el lado menos elástico; en monopolio el precio puede subir más que el impuesto; el equilibrio parcial puede engañar.',
+  c:'Es la herramienta central para evaluar la sobretasa del sector financiero y los aportes a la nómina.',
+  q:'Si los usuarios de un servicio tienen pocas alternativas y las empresas tienen poder de mercado, ¿hacia dónde tiende a ir la carga?'},
+ {t:'Pérdida irrecuperable de eficiencia', b:['Complemento'], f:'Material de consulta, sección 3.8',
+  d:'Todo impuesto que cambia precios relativos induce a cambiar conductas. La pérdida de bienestar por encima de lo recaudado se llama exceso de gravamen. Crece con la elasticidad y crece más que proporcionalmente con la tarifa; de ahí la recomendación de bases amplias con tarifas moderadas.',
+  c:'Eliminar la tarifa del 5 % y ampliar la base del IVA va en la línea de esa recomendación. La productividad del IVA en Colombia es 0,4.',
+  q:'¿Por qué un sistema con tarifas altas y bases estrechas resulta ineficiente?'},
+ {t:'Regresividad del IVA', b:['B1'], f:'Material de consulta, sección 3.7; diapositivas, sesión 6',
+  d:'Como la proporción del ingreso que se consume disminuye con el ingreso, los hogares ricos pagan más IVA en pesos y menos como proporción de su ingreso. En el ejemplo de clase, el hogar de $2 millones paga 8,0 % de su ingreso en IVA y el de $20 millones paga 5,7 %.',
+  c:'La regresividad es el argumento clásico para exonerar la canasta. La pregunta es si la exención es la mejor herramienta para atenuarla.',
+  q:'¿Cambia la conclusión si mides el IVA contra el consumo en lugar del ingreso?'},
+ {t:'Exenciones del IVA por decil', b:['B1'], f:'Material de consulta, sección 3.7; Steiner y Cañas en Cárdenas',
+  d:'El 10 % más rico realiza un tercio del gasto en bienes exentos y el 10 % más pobre el 3 %. La exención es un subsidio que se reparte en proporción al consumo. El gasto tributario del IVA se estimó en 6,6 puntos del PIB (Marco Fiscal 2019), más de lo que efectivamente se recauda con el impuesto.',
+  c:'Es el fundamento conceptual de EfectIVA: gravar de manera uniforme y compensar a los hogares de menores ingresos.',
+  q:'Si se elimina una exención que cuesta $100 y se devuelven $10 al decil más pobre, ¿quién gana y quién pierde?'},
+ {t:'Anomalía colombiana', b:['B2'], f:'Material de consulta, secciones 3.3 y 3.12; Cárdenas',
+  d:'En Colombia las empresas pagan cerca de cuatro veces más renta que las personas; en la OCDE las personas pagan unas 2,8 veces lo que pagan las empresas. Tres explicaciones: administrativa, de economía política y de incidencia.',
+  c:'Mantener la tarifa de sociedades en 35 % y crear el tramo de 9 % afectan los dos lados de la proporción.',
+  q:'La proporción compara recaudos. ¿Qué tendría que pasar con la base de personas para que se mueva de verdad?'},
+ {t:'Incidencia del impuesto de sociedades', b:['B2'], f:'Material de consulta, sección 3.11; Stiglitz y Restrepo',
+  d:'Tres canales: accionistas (lo hace progresivo), consumidores si hay poder de mercado (lo hace regresivo) y trabajadores si cae la inversión y la productividad (regresivo). En economía abierta el capital móvil evita el impuesto y la carga recae sobre factores inmóviles. Restrepo concluye que la traslación depende de las condiciones del mercado.',
+  c:'Si el impuesto recae en accionistas, la anomalía es una etiqueta; si se traslada, el sistema es menos progresivo de lo que parece.',
+  q:'¿Qué evidencia necesitarías para saber cuál de los tres canales domina en un sector concreto?'},
+ {t:'Ilusión fiscal', b:['B1'], f:'Material de consulta, sección 3.13; diapositivas, sesión 6',
+  d:'Reducción de la visibilidad de los impuestos para quien los soporta. El trabajador no ve el aporte del empleador; el consumidor paga IVA en cada compra y nunca lo liquida; un cobro en la factura de un servicio se confunde con la tarifa. Facilita la aprobación del tributo y dificulta el control ciudadano.',
+  c:'Un IVA que se paga dentro del precio y una devolución que llega después por otra vía cambian lo que el hogar percibe en cada momento.',
+  q:'¿Qué percibe un hogar cuando paga el IVA en la tienda y qué percibe cuando, semanas después, recibe o no una devolución?'},
+ {t:'Traslación en la nómina', b:['B3'], f:'Material de consulta, sección 3.10; diapositivas, sesión 6',
+  d:'El aporte del empleador puede ser absorbido por él, trasladado al salario (aumentos menores con el tiempo) o trasladado al empleo (menos empleo formal) cuando el salario no puede bajar. Con oferta de trabajo poco elástica, la carga tiende a recaer sobre el trabajador aunque la ley la ponga en el empleador.',
+  c:'El salario mínimo legal funciona como piso: donde no puede bajar el salario, el ajuste llega por empleo o informalidad.',
+  q:'¿Un trabajador que gana entre dos y tres salarios mínimos enfrenta el mismo piso que uno que gana el mínimo?'},
+ {t:'Beneficios concentrados y costos difusos', b:['Complemento'], f:'Material de consulta, sección 3.13; Olson',
+  d:'Mancur Olson explicó por qué los beneficios concentrados y los costos difusos favorecen a los grupos pequeños y organizados. Una exención sectorial tiene defensores organizados y detractores dispersos.',
+  c:'Ayuda a explicar los reversazos: quién se movilizó, quién quedó callado y quién es el grupo más afectado y menos organizado (asalariados de ingresos medios).',
+  q:'¿Qué actores tenían beneficios concentrados en mantener el IVA fuera de la canasta y de los agroinsumos?'},
+ {t:'Funciones de Musgrave', b:['B4'], f:'Material de consulta, sección 5.4; diapositivas, sesión 7',
+  d:'Estabilización: a la Nación, porque el estímulo local se filtra a los vecinos y el municipio no controla la política monetaria. Distribución: principalmente a la Nación, porque la redistribución local destruye su base cuando ricos y pobres se mueven; el instrumento del centro son las transferencias. Asignación: puede descentralizarse cuando el beneficio es local.',
+  c:'Permite preguntar qué pasa cuando la Nación ejerce estabilización y distribución con medidas cuyos costos terminan en las finanzas territoriales.',
+  q:'¿Por qué un municipio que cobra un predial muy progresivo para subsidios generosos puede quedarse sin base?'},
+ {t:'Brecha vertical', b:['B4'], f:'Material de consulta, sección 5.8; diapositivas, sesión 7',
+  d:'La distribución de competencias y recursos entre niveles no coincide: el centro concentra el recaudo y los territorios ejecutan una parte grande del gasto. En 2025 las transferencias fueron 43,4 % de los ingresos municipales y 56,9 % de los departamentales.',
+  c:'Si una medida nacional reduce la base propia de los departamentos, la brecha vertical se profundiza.',
+  q:'¿Por qué la descentralización del gasto en Colombia obligó a transferir ingresos nacionales?'},
+ {t:'Brecha horizontal', b:['B4'], f:'Material de consulta, sección 5.8; diapositivas, sesión 7',
+  d:'Entidades del mismo nivel con capacidades muy distintas de generar recursos propios. Unos 24 municipios concentran tres cuartas partes del recaudo municipal y Bogotá aporta un tercio.',
+  c:'Una misma medida nacional golpea distinto a un departamento con base diversificada y a uno que vive del consumo de licores o del contrabando de frontera.',
+  q:'¿Afecta igual una caída del consumo de cerveza a Antioquia y a un departamento con dependencia superior al 80 %?'},
+ {t:'Principio de correspondencia', b:['B4'], f:'Material de consulta, sección 5.7; Olson (1969)',
+  d:'El área que se beneficia de un bien público debería coincidir con la jurisdicción que lo decide y lo financia. Cuando el beneficio se desborda, la decisión local resulta ineficiente.',
+  c:'Sirve para discutir quién debe decidir y quién debe pagar cuando la Nación toma decisiones cuyos efectos fiscales caen en los territorios.',
+  q:'Si la Nación decide una política y el costo recae en los departamentos, ¿quién responde ante el ciudadano?'},
+ {t:'Base gravable compartida', b:['B4'], f:'Material de consulta, secciones 3.1, 4.6 y 6.10',
+  d:'Dos niveles de gobierno obtienen recursos de la misma base económica, y una decisión de uno cambia el recaudo del otro. El consumo de licores, cerveza y cigarrillos es una base cuyas tarifas fija la ley nacional y cuyo recaudo reciben los departamentos.',
+  c:'También los ingresos corrientes de la Nación funcionan como base compartida: son el denominador sobre el que se calcula el SGP.',
+  q:'¿Qué medidas del proyecto gravan o modifican una base de la que también vive un departamento o municipio?'},
+ {t:'Pereza fiscal', b:['B4'], f:'Material de consulta, sección 5.9; diapositivas, sesión 7',
+  d:'Si los territorios reciben recursos crecientes y automáticos, sus gobernantes tienen poco interés en asumir el costo político de cobrar impuestos propios. La misión Wiesner la daba por comprobada a comienzos de los noventa; García Garzón encuentra datos que sugieren que la tributación propia acompañó a las transferencias.',
+  c:'Si un departamento pierde base propia y gana transferencias, los incentivos al esfuerzo fiscal cambian.',
+  q:'¿Qué indicador mirarías para saber si un territorio hace menos esfuerzo de recaudo propio?'},
+ {t:'Papel matamoscas', b:['B4'], f:'Material de consulta, sección 5.9; Hines y Thaler (1995)',
+  d:'El dinero se queda pegado donde cae: si la Nación gira una suma a la alcaldía, el gasto local sube mucho más que si rebaja impuestos por el mismo monto a los residentes. La diferencia la explica la economía política.',
+  c:'La forma de la transferencia cambia el tamaño del sector público local y la relación de rendición de cuentas.',
+  q:'¿Por qué los ciudadanos vigilan menos un gasto que saben financiado desde fuera?'},
+ {t:'Péndulo colombiano de descentralización', b:['B4'], f:'Material de consulta, sección 6; diapositivas, sesión 7',
+  d:'La historia fiscal colombiana alterna movimientos hacia el centro, nacidos de crisis fiscales (1886, 1999), y movimientos hacia el territorio, nacidos de demandas regionales (1968, 1986, 1991, 2024).',
+  c:'Una ley de ajuste en medio de una crisis fiscal coincide con el Acto Legislativo 03 de 2024 que aumenta el SGP. Las dos fuerzas del péndulo operan a la vez.',
+  q:'¿Hacia qué lado empuja la Ley de Rescate, y por qué?'},
+ {t:'Restricción presupuestaria intertemporal', b:['Cierre'], f:'Sesión 5 y sesión de política fiscal',
+  d:'A lo largo del tiempo, el Estado no puede gastar indefinidamente más de lo que recauda: la deuda de hoy debe cubrirse con superávits primarios futuros, es decir, con más impuestos, menos gasto o ambas cosas. Un déficit hoy es una carga tributaria o un recorte mañana.',
+  c:'Sin medidas, el CARF proyectó déficits de 7,2 % del PIB en 2026 y 9,4 % en 2027. En el PGN 2027 los intereses ($94,4 billones) superan la inversión ($86,9 billones). La Ley de Rescate busca mejorar las cuentas entre $47 y $51 billones en 2027.',
+  q:'Si el proyecto concentra el 70 % del esfuerzo en gasto, ¿qué dice la restricción intertemporal sobre lo que pasa si ese recorte no se cumple?'},
+ {t:'Legalidad e irretroactividad tributaria', b:['Complemento'], f:'Material de consulta, sección 2.8',
+  d:'Los tributos los crea un órgano de representación popular (artículo 338). La emergencia del artículo 215 es una excepción que exige hechos sobrevinientes e imprevisibles. Los cambios en impuestos de período, como la renta, solo rigen desde el período siguiente a su vigencia.',
+  c:'Explica la caída de la emergencia de 2025 y el mensaje de urgencia: los cambios en renta solo aplican a 2027 si la ley está vigente antes del 1 de enero.',
+  q:'¿Por qué un cambio en el IVA puede regir desde la fecha que diga la ley y uno en renta no?'}
+];
+var BLOQUES = [['todos','Todos'],['B1','IVA'],['B2','Renta'],['B3','Cotización y saludables'],['B4','Territorio'],['Cierre','Sostenibilidad'],['Complemento','Complementarios']];
+var NOMBRE_TEMA={B1:'IVA',B2:'Renta',B3:'Cotización y saludables',B4:'Territorio',Cierre:'Sostenibilidad'};
+var filtroActual='todos';
+var dominados = store.get('fp_parte1_dominados',{});
+function pintarFiltros(){
+  $('filtrosConceptos').innerHTML = BLOQUES.map(function(b){return '<button data-f="'+b[0]+'" class="'+(b[0]===filtroActual?'on':'')+'">'+b[1]+'</button>';}).join('');
+  $('filtrosConceptos').querySelectorAll('button').forEach(function(bt){bt.addEventListener('click',function(){filtroActual=bt.getAttribute('data-f');pintarFiltros();pintarConceptos();});});
+}
+function pintarConceptos(){
+  var q = ($('buscaConcepto').value||'').toLowerCase();
+  var html='';
+  CONCEPTOS.forEach(function(c,i){
+    if(filtroActual!=='todos' && c.b.indexOf(filtroActual)<0) return;
+    var txt=(c.t+' '+c.d+' '+c.c).toLowerCase();
+    if(q && txt.indexOf(q)<0) return;
+    var tags=c.b.map(function(x){return '<span class="tag">'+(NOMBRE_TEMA[x]||x)+'</span>';}).join('');
+    html+='<details class="concepto"><summary><span class="t">'+(dominados[i]?'✓ ':'')+esc(c.t)+'</span><span>'+tags+'</span></summary><div class="body">'+
+      '<h5>Definición</h5><p>'+esc(c.d)+'</p>'+
+      '<h5>En el caso</h5><p>'+esc(c.c)+'</p>'+
+      '<h5>Pregunta de control</h5><p><em>'+esc(c.q)+'</em></p>'+
+      '<p class="muted">Dónde está: '+esc(c.f)+'</p>'+
+      '<label class="dom"><input type="checkbox" data-i="'+i+'" '+(dominados[i]?'checked':'')+'> Ya lo domino</label></div></details>';
+  });
+  $('listaConceptos').innerHTML = html || '<p class="muted">No hay conceptos con ese filtro.</p>';
+  $('listaConceptos').querySelectorAll('input[type=checkbox]').forEach(function(cb){
+    cb.addEventListener('change',function(){var i=cb.getAttribute('data-i');if(cb.checked){dominados[i]=true;}else{delete dominados[i];}store.set('fp_parte1_dominados',dominados);progresoConceptos();
+      var t=cb.closest('details').querySelector('.t');t.textContent=(cb.checked?'✓ ':'')+CONCEPTOS[i].t;});
+  });
+  progresoConceptos();
+}
+function progresoConceptos(){var n=Object.keys(dominados).length;$('progresoConceptos').textContent='Has marcado '+n+' de '+CONCEPTOS.length+' conceptos como dominados. La marca se guarda en este navegador.';}
+$('buscaConcepto').addEventListener('input',pintarConceptos);
+pintarFiltros();pintarConceptos();
+
+/* ---------------- árbol de clasificación ---------------- */
+var NODOS = {
+  inicio:{q:'¿El Estado exige el cobro por ley, en ejercicio de su poder de imperio, para financiar sus fines?', o:[['Sí','vinc'],['No: nace de un contrato, de la propiedad del Estado o de una sanción','noTrib']]},
+  vinc:{q:'¿El hecho generador incluye una actuación del Estado referida a quien paga?', o:[['Sí, el cobro existe porque el Estado hace algo respecto del obligado','servicio'],['No, basta un hecho del contribuyente: obtener renta, vender, comprar, poseer','sector']]},
+  servicio:{q:'¿Esa actuación es un servicio que se presta de manera individualizada a quien paga?', o:[['Sí, como expedir un pasaporte o administrar justicia','rTasa'],['No, es una obra o actividad que beneficia de manera especial a un grupo','rCont'],['No encuentro la actuación estatal en la norma, solo en el nombre del cobro','rImpDisfrazado']]},
+  sector:{q:'¿Lo paga obligatoriamente un sector definido por la ley y lo recaudado se reinvierte en beneficio de ese mismo sector?', o:[['Sí','rPara'],['No, lo paga cualquiera que realice el hecho y financia el conjunto de funciones públicas','rImp']]},
+  noTrib:{r:'no', t:'No es un tributo', d:'Puede ser un precio (servicio que el Estado presta en concurrencia con particulares), una renta patrimonial o contractual, una regalía (contraprestación por la propiedad del subsuelo), una multa (finalidad punitiva) o crédito. Ojo: en la ejecución presupuestal las tasas aparecen como ingresos no tributarios, pero su régimen jurídico es el de los tributos.'},
+  rTasa:{r:'tasa', t:'Tasa (tributo vinculado)', d:'Remunera un servicio individualizado. Pruebas de Caracas (1991): el servicio debe prestarse efectivamente, el producto no debe ir a un destino ajeno al servicio, debe guardar razonable equivalencia con su costo y la base debe medirse con algún elemento del hecho generador. Única especie con algo de voluntariedad: la decisión de solicitar el servicio.'},
+  rCont:{r:'cont', t:'Contribución especial (tributo vinculado)', d:'La pagan quienes reciben un beneficio diferencial de una obra o actividad estatal. Ejemplo clásico: la valorización por una vía que sube el valor de los predios cercanos (artículo 317 de la Constitución).'},
+  rImpDisfrazado:{r:'imp', t:'Se comporta como impuesto, cualquiera que sea su nombre', d:'Si la actuación estatal solo aparece en el rótulo o en la destinación declarada, el hecho generador es un acto del contribuyente y el cobro tiende a comportarse como tributo no vinculado. Varios departamentos han cobrado figuras así en facturas de servicios domiciliarios; el Consejo de Estado anuló en 2025 la del Valle del Cauca.'},
+  rPara:{r:'para', t:'Contribución parafiscal', d:'Obligatoria, a cargo de un grupo definido y reinvertida en ese grupo, por lo que escapa a la prohibición de rentas nacionales de destinación específica. Ejemplos: contribución cafetera, aportes al SENA y al ICBF, cotizaciones a salud. La doctrina la trata como figura propia; aquí aparece en esta rama para que la distingas del impuesto.'},
+  rImp:{r:'imp', t:'Impuesto (tributo no vinculado)', d:'Nace de un hecho que revela capacidad económica, sin contraprestación individual. Se reparte según capacidad de pago. Ejemplos: renta, IVA, predial, ICA, impuesto al consumo de licores.'}
+};
+var camino=[];
+function pintarArbol(id){
+  var n=NODOS[id];var h='';
+  if(camino.length){h+='<div class="camino">Camino: '+camino.map(esc).join(' → ')+'</div>';}
+  if(n.q){
+    h+='<div class="q">'+esc(n.q)+'</div>';
+    n.o.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+esc(o[0])+'</button>';});
+  } else {
+    h+='<div class="res '+n.r+'"><b>'+esc(n.t)+'</b><p style="margin:6px 0 0">'+esc(n.d)+'</p></div>';
+  }
+  if(id!=='inicio'){h+='<div style="margin-top:10px"><button class="btn" id="arbolReset">Empezar de nuevo</button></div>';}
+  $('arbol').innerHTML=h;
+  if(n.q){$('arbol').querySelectorAll('button.opt').forEach(function(b){b.addEventListener('click',function(){var o=n.o[+b.getAttribute('data-k')];camino.push(o[0].split(',')[0].split(':')[0]);pintarArbol(o[1]);});});}
+  var r=$('arbolReset');if(r){r.addEventListener('click',function(){camino=[];pintarArbol('inicio');});}
+}
+pintarArbol('inicio');
+
+var TIPOS=['Impuesto','Tasa','Contribución especial','Contribución parafiscal','No es tributo'];
+var CASOS=[
+ {e:'El predial que cobra un municipio a los propietarios de inmuebles.', r:0, x:'El hecho generador es ser propietario, un hecho del contribuyente que revela capacidad económica. No hay contraprestación individual.'},
+ {e:'Lo que pagas a la Cancillería para que te expidan el pasaporte.', r:1, x:'Servicio estatal individualizado que solo puede prestar el Estado. La voluntariedad se limita a decidir si lo solicitas.'},
+ {e:'El cobro a los propietarios de predios que se valorizan por una nueva avenida.', r:2, x:'Beneficio diferencial derivado de una obra pública, repartido entre quienes lo reciben: contribución de valorización.'},
+ {e:'La contribución que pagan productores y exportadores de café para el Fondo Nacional del Café.', r:3, x:'Pago obligatorio a cargo de un sector definido por la ley, que se reinvierte en ese mismo sector.'},
+ {e:'La cotización a salud que el empleador paga sobre la nómina de sus trabajadores.', r:3, x:'La jurisprudencia la ha tratado como recurso parafiscal: grupo definido y destino al sistema de salud. Económicamente se comporta como un impuesto al trabajo, y por eso sirve para el análisis de traslación.'},
+ {e:'Una ordenanza que cobra $4.000 mensuales en la factura de energía a todo usuario, con el nombre de "tasa de seguridad".', r:0, x:'El hecho generador es consumir energía, un acto del contribuyente; la actividad estatal que se quiere financiar no aparece en él. Por sustancia se comporta como tributo no vinculado, cualquiera que sea su nombre.'},
+ {e:'La cuota de administración que pagas en el edificio donde vives.', r:4, x:'La cobra una persona jurídica privada según su reglamento. No interviene el poder de imperio del Estado.'},
+ {e:'La multa por pasarte un semáforo en rojo.', r:4, x:'Tiene finalidad punitiva y no se exige para financiar al Estado, aunque ingrese al presupuesto.'},
+ {e:'Las regalías que paga una empresa petrolera por extraer crudo.', r:4, x:'Contraprestación por la explotación de un recurso de propiedad del Estado (artículo 332). Se parece a un impuesto porque es un porcentaje de la producción, pero su fundamento es la propiedad.'},
+ {e:'El impuesto de registro que se paga al inscribir una escritura.', r:0, x:'Conserva su nombre de impuesto con razón: su monto se calcula sobre el valor del acto inscrito, sin relación con el costo del servicio registral.'},
+ {e:'El impuesto a las bebidas azucaradas fijado en pesos según los gramos de azúcar.', r:0, x:'Impuesto: el hecho generador es un acto del contribuyente. Tiene además un fin extrafiscal declarado, que no cambia su especie.'},
+ {e:'La tarifa del acueducto que te cobra la empresa de servicios públicos.', r:4, x:'Los servicios públicos domiciliarios pueden prestarlos el Estado, comunidades o particulares, y su tarifa se acerca a la figura del precio público.'}
+];
+var aciertosCasos=0,respCasos=0;
+function pintarCasos(){
+  var h='';
+  CASOS.forEach(function(c,i){
+    h+='<div class="caso" data-i="'+i+'"><div class="enun">'+(i+1)+'. '+esc(c.e)+'</div><div class="chips">'+
+      TIPOS.map(function(t,k){return '<button data-k="'+k+'">'+t+'</button>';}).join('')+'</div><div class="fb"></div></div>';
+  });
+  $('casosClasificar').innerHTML=h;
+  $('casosClasificar').querySelectorAll('.caso').forEach(function(div){
+    var i=+div.getAttribute('data-i');var hecho=false;
+    div.querySelectorAll('.chips button').forEach(function(b){
+      b.addEventListener('click',function(){
+        if(hecho) return; hecho=true; respCasos++;
+        var k=+b.getAttribute('data-k');var ok=k===CASOS[i].r;
+        if(ok){aciertosCasos++;b.classList.add('ok');}else{b.classList.add('mal');div.querySelector('.chips button[data-k="'+CASOS[i].r+'"]').classList.add('ok');}
+        var fb=div.querySelector('.fb');fb.className='fb show '+(ok?'ok':'mal');
+        fb.innerHTML='<b>'+(ok?'Correcto.':'Respuesta esperada: '+TIPOS[CASOS[i].r]+'.')+'</b> '+esc(CASOS[i].x);
+        $('marcadorCasos').textContent='Aciertos: '+aciertosCasos+' de '+respCasos;
+      });
+    });
+  });
+}
+pintarCasos();
+
+/* ---------------- simulador de incidencia ---------------- */
+function incidencia(){
+  var b=+$('sB').value, c=+$('sC').value, t=+$('sT').value, ley=$('quienLey').value;
+  $('vB').textContent=nf2.format(b);$('vC').textContent=nf2.format(c);$('vT').textContent=nf2.format(t);
+  var P0=30,Q0=40;
+  var sc=c/(b+c);            // parte del comprador
+  var Pc=P0+t*sc, Pv=Pc-t, Q1=Q0-b*(Pc-P0);
+  var rec=t*Q1, dwl=0.5*t*(Q0-Q1);
+  $('kpisIncidencia').innerHTML =
+    kpi(nf2.format(Pc),'Precio que paga el comprador')+
+    kpi(nf2.format(Pv),'Precio que recibe el vendedor')+
+    kpi(nf0.format(sc*100)+' %','Parte del impuesto que soporta el comprador')+
+    kpi(nf0.format((1-sc)*100)+' %','Parte que soporta el vendedor')+
+    kpi(nf2.format(rec),'Recaudo (millones)','g')+
+    kpi(nf2.format(dwl),'Pérdida de eficiencia (millones)','r');
+  var quien = ley==='v' ? 'al vendedor' : 'al comprador';
+  var lado = b<c ? 'la demanda es menos sensible al precio que la oferta, así que el comprador soporta la mayor parte' : (b>c ? 'la oferta es menos sensible al precio que la demanda, así que el vendedor soporta la mayor parte' : 'las dos sensibilidades son iguales y la carga se reparte por mitades');
+  $('textoIncidencia').innerHTML='La ley obliga '+quien+'. El resultado económico es el mismo con cualquiera de las dos opciones: el comprador paga '+nf2.format(Pc)+' y el vendedor recibe '+nf2.format(Pv)+'. Aquí '+lado+'. La cantidad cae de 40 a '+nf2.format(Q1)+'; las unidades que dejan de transarse generan una pérdida de '+nf2.format(dwl)+' millones que nadie recibe.';
+  dibujarIncidencia(b,c,t,Pc,Pv,Q1);
+}
+function dibujarIncidencia(b,c,t,Pc,Pv,Q1){
+  var svg=$('graficoIncidencia');while(svg.firstChild)svg.removeChild(svg.firstChild);
+  var L=50,R=500,T=20,B=330, qmin=0,qmax=70,pmin=10,pmax=50;
+  function X(q){return L+(q-qmin)/(qmax-qmin)*(R-L);} function Y(p){return B-(p-pmin)/(pmax-pmin)*(B-T);}
+  var defs=S('defs',{});var cp=S('clipPath',{id:'cpInc'});cp.appendChild(S('rect',{x:L,y:T,width:R-L,height:B-T}));defs.appendChild(cp);svg.appendChild(defs);
+  // ejes
+  svg.appendChild(S('line',{x1:L,y1:B,x2:R,y2:B,stroke:'#555'}));svg.appendChild(S('line',{x1:L,y1:T,x2:L,y2:B,stroke:'#555'}));
+  [10,20,30,40,50,60,70].forEach(function(q){svg.appendChild(S('text',{x:X(q),y:B+16,'font-size':11,'text-anchor':'middle',fill:'#666'},q));});
+  [10,20,30,40,50].forEach(function(p){svg.appendChild(S('text',{x:L-8,y:Y(p)+4,'font-size':11,'text-anchor':'end',fill:'#666'},p));});
+  svg.appendChild(S('text',{x:R,y:B+30,'font-size':12,'text-anchor':'end',fill:'#333'},'Cantidad (miles)'));
+  svg.appendChild(S('text',{x:L,y:T-6,'font-size':12,fill:'#333'},'Precio (miles de pesos)'));
+  var g=S('g',{'clip-path':'url(#cpInc)'});svg.appendChild(g);
+  // áreas
+  if(t>0){
+    g.appendChild(S('rect',{x:X(0),y:Y(Pc),width:X(Q1)-X(0),height:Y(Pv)-Y(Pc),fill:'#c9d2e6',opacity:.75}));
+    g.appendChild(S('polygon',{points:X(Q1)+','+Y(Pc)+' '+X(Q1)+','+Y(Pv)+' '+X(40)+','+Y(30),fill:'#f2c27a',opacity:.9}));
+  }
+  function linea(fn,col,dash){var pts=[];for(var q=0;q<=70;q+=1){pts.push(X(q)+','+Y(fn(q)));}g.appendChild(S('polyline',{points:pts.join(' '),fill:'none',stroke:col,'stroke-width':2.5,'stroke-dasharray':dash||''}));}
+  linea(function(q){return 30-(q-40)/b;},'#2F467A');
+  linea(function(q){return 30+(q-40)/c;},'#DC5050');
+  if(t>0) linea(function(q){return 30+(q-40)/c+t;},'#DC5050','6 4');
+  // puntos y guías
+  [[40,30],[Q1,Pc],[Q1,Pv]].forEach(function(pq){g.appendChild(S('circle',{cx:X(pq[0]),cy:Y(pq[1]),r:4,fill:'#111'}));});
+  g.appendChild(S('line',{x1:L,y1:Y(Pc),x2:X(Q1),y2:Y(Pc),stroke:'#999','stroke-dasharray':'3 3'}));
+  g.appendChild(S('line',{x1:L,y1:Y(Pv),x2:X(Q1),y2:Y(Pv),stroke:'#999','stroke-dasharray':'3 3'}));
+  // leyenda
+  var lx=R-150,ly=T+10;
+  svg.appendChild(S('rect',{x:lx-6,y:ly-10,width:156,height:94,fill:'#fff',opacity:.92,stroke:'#dde1e8',rx:4}));
+  [['Demanda','#2F467A',''],['Oferta','#DC5050',''],['Oferta con impuesto','#DC5050','6 4']].forEach(function(it,k){
+    svg.appendChild(S('line',{x1:lx,y1:ly+k*18,x2:lx+22,y2:ly+k*18,stroke:it[1],'stroke-width':2.5,'stroke-dasharray':it[2]}));
+    svg.appendChild(S('text',{x:lx+28,y:ly+k*18+4,'font-size':12,fill:'#333'},it[0]));});
+  svg.appendChild(S('rect',{x:lx,y:ly+50,width:14,height:10,fill:'#c9d2e6'}));svg.appendChild(S('text',{x:lx+28,y:ly+59,'font-size':12,fill:'#333'},'Recaudo'));
+  svg.appendChild(S('rect',{x:lx,y:ly+68,width:14,height:10,fill:'#f2c27a'}));svg.appendChild(S('text',{x:lx+28,y:ly+77,'font-size':12,fill:'#333'},'Pérdida de eficiencia'));
+}
+['sB','sC','sT'].forEach(function(id){$(id).addEventListener('input',incidencia);});
+$('quienLey').addEventListener('change',incidencia);
+document.querySelectorAll('[data-preset]').forEach(function(bt){bt.addEventListener('click',function(){
+  var p=bt.getAttribute('data-preset');
+  if(p==='clase'){$('sB').value=2;$('sC').value=3;$('sT').value=5;}
+  if(p==='dinel'){$('sB').value=0.5;$('sC').value=4;$('sT').value=5;}
+  if(p==='oinel'){$('sB').value=4;$('sC').value=0.5;$('sT').value=5;}
+  incidencia();});});
+incidencia();
+
+var PRACT=[
+ {e:'Un nuevo impuesto a los medicamentos para una enfermedad crónica, que los pacientes no pueden dejar de comprar.', o:['Hacia adelante: lo soportan sobre todo los pacientes','Hacia atrás: lo soportan sobre todo los laboratorios','Se reparte por mitades siempre'], r:0, x:'La demanda es muy poco elástica: el lado que menos puede moverse soporta la mayor parte.'},
+ {e:'Un impuesto a la producción de un cultivo que los campesinos no pueden reemplazar en el corto plazo, vendido en un mercado con muchos compradores y sustitutos importados.', o:['Hacia adelante: lo soportan los compradores','Hacia atrás: lo soportan sobre todo los productores','No se traslada porque la ley lo pone en el productor'], r:1, x:'La oferta es poco elástica y la demanda tiene sustitutos: la carga se queda en los productores.'},
+ {e:'Una sobretasa a las pocas empresas de telefonía móvil del país, cuyos usuarios casi no pueden prescindir del servicio.', o:['Probablemente se traslada en buena parte a los usuarios, y con poder de mercado el precio podría subir incluso más que el impuesto','La absorben siempre los accionistas porque la ley grava la utilidad','Desaparece porque las empresas son ficciones jurídicas'], r:0, x:'Poder de mercado y demanda poco elástica favorecen la traslación hacia adelante. Que el impuesto recaiga sobre la utilidad según la ley no garantiza que lo soporten los accionistas.'}
+];
+function pintarPreguntas(cont,items,cb){
+  var h='';
+  items.forEach(function(it,i){
+    h+='<div class="caso" data-i="'+i+'"><div class="enun">'+esc(it.e)+'</div>'+it.o.map(function(o,k){return '<button class="opt" data-k="'+k+'">'+esc(o)+'</button>';}).join('')+'<div class="fb"></div></div>';
+  });
+  cont.innerHTML=h;
+  cont.querySelectorAll('.caso').forEach(function(div){
+    var i=+div.getAttribute('data-i');var hecho=false;
+    div.querySelectorAll('button.opt').forEach(function(b){b.addEventListener('click',function(){
+      if(hecho)return;hecho=true;var k=+b.getAttribute('data-k');var ok=k===items[i].r;
+      div.querySelectorAll('button.opt').forEach(function(x){x.disabled=true;});
+      b.classList.add(ok?'ok':'mal');if(!ok){div.querySelector('button.opt[data-k="'+items[i].r+'"]').classList.add('ok');}
+      var fb=div.querySelector('.fb');fb.className='fb show '+(ok?'ok':'mal');fb.innerHTML='<b>'+(ok?'Bien.':'Revisa.')+'</b> '+esc(items[i].x);
+      if(cb)cb(ok);
+    });});
+  });
+}
+pintarPreguntas($('practicaTraslacion'),PRACT);
+
+/* ---------------- IVA: hogares ---------------- */
+function hogares(){
+  function calc(p){var ing=+$(p+'Ing').value*1e6, cons=+$(p+'Cons').value/100, grav=+$(p+'Grav').value/100;
+    $('v'+p.toUpperCase()+'Cons').textContent=nf0.format(cons*100)+' %';$('v'+p.toUpperCase()+'Grav').textContent=nf0.format(grav*100)+' %';
+    var iva=ing*cons*grav*0.19/1.19;return {ing:ing,iva:iva,tm:ing>0?iva/ing*100:0,tc:(ing*cons)>0?iva/(ing*cons)*100:0};}
+  var A=calc('a'),B=calc('b');
+  $('kA').innerHTML=kpi(pesos(A.iva),'IVA pagado al mes')+kpi(pct(A.tm),'Del ingreso')+kpi(pct(A.tc),'Del consumo');
+  $('kB').innerHTML=kpi(pesos(B.iva),'IVA pagado al mes')+kpi(pct(B.tm),'Del ingreso')+kpi(pct(B.tc),'Del consumo');
+  var veces=A.iva>0?B.iva/A.iva:0;
+  var concl = (A.tm>B.tm) ? 'Con estos supuestos el IVA es regresivo respecto del ingreso: el hogar de menores ingresos destina una proporción mayor de su ingreso al impuesto.' : 'Con estos supuestos el hogar de mayores ingresos paga una proporción igual o mayor de su ingreso: revisa qué supuesto cambiaste para que ocurra.';
+  $('textoHogares').innerHTML='El hogar B paga '+nf1.format(veces)+' veces lo que paga A en pesos. '+concl;
+}
+['aIng','aCons','aGrav','bIng','bCons','bGrav'].forEach(function(id){$(id).addEventListener('input',hogares);});
+hogares();
+
+function exencion(){
+  var d=+$('sDev').value;$('vDev').textContent='$'+d;
+  $('kExencion').innerHTML=kpi('$3','Recibe hoy el decil más pobre')+kpi('$'+d,'Recibiría con la devolución',d>3?'g':'r')+kpi('$'+(100-d),'Le queda al fisco')+kpi('$33','Pierde el decil más rico','r');
+  $('textoExencion').textContent = d>3 ? 'El decil más pobre recibe '+nf1.format(d/3)+' veces lo que recibe hoy y al fisco le quedan $'+(100-d)+'. Los deciles intermedios pierden su parte de la exención sin compensación.' : 'Con una devolución de $3 o menos el decil más pobre queda igual o peor que con la exención.';
+}
+$('sDev').addEventListener('input',exencion);exencion();
+
+/* ---------------- EfectIVA ---------------- */
+var PCT_DECIL={1:1,2:1,3:1,4:0.5,5:0.4,6:0.3,7:0,8:0,9:0,10:0};
+var TOPE=288057;
+function efectiva(){
+  var dec=+$('eDecil').value, ing=+$('eIng').value, gasto=+$('eGasto').value, pers=Math.max(1,+$('ePers').value), fact=+$('eFact').value/100;
+  $('vFact').textContent=nf0.format(fact*100)+' %';
+  var iva=gasto*0.19/1.19, base=iva*fact*PCT_DECIL[dec], tope=TOPE*pers, dev=Math.min(base,tope), neto=iva-dev;
+  $('kEfectiva').innerHTML=kpi(pesos(iva),'IVA contenido en sus compras')+kpi(nf0.format(PCT_DECIL[dec]*100)+' %','Porcentaje de devolución de su decil')+
+    kpi(pesos(dev),'Devolución recibida','g')+kpi(pesos(neto),'IVA que soporta al final','r')+
+    kpi(ing>0?pct(neto/ing*100):'sin dato','IVA neto como parte del ingreso')+kpi(iva>0?pct(dev/iva*100):'0 %','Parte del IVA que recupera');
+  var t='';
+  if(PCT_DECIL[dec]===0){t='Un hogar del decil '+dec+' queda fuera de EfectIVA: soporta completo el IVA de sus compras. Si sus compras pasan del 5 % al 19 %, soporta todo el aumento.';}
+  else if(fact<1){t='Aunque su decil tiene derecho a una devolución del '+nf0.format(PCT_DECIL[dec]*100)+' %, este hogar recupera apenas el '+nf0.format(iva>0?dev/iva*100:0)+' % del IVA que paga, porque solo el '+nf0.format(fact*100)+' % de sus compras queda registrado en factura electrónica.';}
+  else {t='Con todas sus compras facturadas, el hogar recupera el '+nf0.format(iva>0?dev/iva*100:0)+' % del IVA'+(base>tope?', limitado por el tope mensual.':'.');}
+  t+=' Recuerda además que el hogar paga el IVA en el momento de la compra y la devolución llega después.';
+  $('textoEfectiva').textContent=t;
+}
+['eDecil','eIng','eGasto','ePers','eFact'].forEach(function(id){$(id).addEventListener('input',efectiva);});
+efectiva();
+
+/* ---------------- renta ---------------- */
+var UVT=52374;
+var VIG=[[0,1090,0],[1090,1700,.19],[1700,4100,.28],[4100,8670,.33],[8670,18970,.35],[18970,31000,.37],[31000,Infinity,.39]];
+var PRO=[[0,720,0],[720,1090,.09],[1090,1700,.19],[1700,4100,.28],[4100,8670,.33],[8670,Infinity,.39]];
+function impRenta(millones,tabla){var u=millones*1e6/UVT,t=0,marg=0;tabla.forEach(function(tr){if(u>tr[0]){t+=(Math.min(u,tr[1])-tr[0])*tr[2];marg=tr[2];}});return {imp:t*UVT/1e6,marg:marg,media:millones>0?t*UVT/1e6/millones:0};}
+function renta(fuente){
+  var m;
+  if(fuente==='n'){m=Math.max(0,+$('nRenta').value||0);$('sRenta').value=Math.min(2500,m);} else {m=+$('sRenta').value;$('nRenta').value=m;}
+  $('vRenta').textContent='$'+nf0.format(m)+' millones';
+  var a=impRenta(m,VIG),b=impRenta(m,PRO);
+  $('tablaRenta').innerHTML='<tr><th></th><th class="num">Vigente</th><th class="num">Propuesta</th></tr>'+
+    '<tr><td>Impuesto anual</td><td class="num">$'+nf2.format(a.imp)+' M</td><td class="num">$'+nf2.format(b.imp)+' M</td></tr>'+
+    '<tr><td>Tarifa marginal</td><td class="num">'+nf0.format(a.marg*100)+' %</td><td class="num">'+nf0.format(b.marg*100)+' %</td></tr>'+
+    '<tr><td>Tarifa media</td><td class="num"><b>'+nf1.format(a.media*100)+' %</b></td><td class="num"><b>'+nf1.format(b.media*100)+' %</b></td></tr>'+
+    '<tr><td>Cambio en pesos</td><td class="num" colspan="2">$'+nf2.format(b.imp-a.imp)+' millones al año</td></tr>';
+  dibujarRenta(m);
+}
+function dibujarRenta(m){
+  var svg=$('graficoRenta');while(svg.firstChild)svg.removeChild(svg.firstChild);
+  var L=50,R=505,T=18,B=295,xmax=1000,ymax=40;
+  function X(v){return L+v/xmax*(R-L);} function Y(v){return B-v/ymax*(B-T);}
+  for(var y=0;y<=40;y+=10){svg.appendChild(S('line',{x1:L,y1:Y(y),x2:R,y2:Y(y),stroke:'#eee'}));svg.appendChild(S('text',{x:L-6,y:Y(y)+4,'font-size':11,'text-anchor':'end',fill:'#666'},y+' %'));}
+  [0,200,400,600,800,1000].forEach(function(v){svg.appendChild(S('text',{x:X(v),y:B+16,'font-size':11,'text-anchor':'middle',fill:'#666'},'$'+v));});
+  svg.appendChild(S('line',{x1:L,y1:B,x2:R,y2:B,stroke:'#555'}));svg.appendChild(S('line',{x1:L,y1:T,x2:L,y2:B,stroke:'#555'}));
+  svg.appendChild(S('text',{x:R,y:B+32,'font-size':12,'text-anchor':'end',fill:'#333'},'Renta gravable anual (millones)'));
+  [[VIG,'#2F467A'],[PRO,'#DC5050']].forEach(function(tc){var pts=[];for(var v=1;v<=1000;v+=5){pts.push(X(v)+','+Y(impRenta(v,tc[0]).media*100));}svg.appendChild(S('polyline',{points:pts.join(' '),fill:'none',stroke:tc[1],'stroke-width':2.5}));});
+  if(m>0&&m<=1000){var a=impRenta(m,VIG).media*100,b=impRenta(m,PRO).media*100;
+    svg.appendChild(S('line',{x1:X(m),y1:T,x2:X(m),y2:B,stroke:'#999','stroke-dasharray':'3 3'}));
+    svg.appendChild(S('circle',{cx:X(m),cy:Y(a),r:4,fill:'#2F467A'}));svg.appendChild(S('circle',{cx:X(m),cy:Y(b),r:4,fill:'#DC5050'}));}
+  svg.appendChild(S('text',{x:L+10,y:T+12,'font-size':12,fill:'#2F467A'},'Vigente'));svg.appendChild(S('text',{x:L+70,y:T+12,'font-size':12,fill:'#DC5050'},'Propuesta'));
+}
+$('sRenta').addEventListener('input',function(){renta('s');});$('nRenta').addEventListener('input',function(){renta('n');});
+renta('s');
+
+function anomalia(){
+  var e=+$('sMEmp').value,p=+$('sMPer').value;
+  $('vMEmp').textContent=nf2.format(e)+' veces';$('vMPer').textContent=nf1.format(p)+' veces';
+  var ratio=4*e/p; var ocde=1/2.8;
+  $('kAnomalia').innerHTML=kpi(nf2.format(ratio),'Empresas por cada peso de personas')+kpi(nf2.format(ocde),'Patrón OCDE')+kpi(nf1.format(4*e/ocde),'Veces que tendría que crecer el recaudo de personas para llegar al patrón OCDE');
+  $('textoAnomalia').textContent = ratio>1 ? 'Las empresas siguen pagando más que las personas: la proporción colombiana sigue invertida frente a la OCDE.' : (ratio>ocde ? 'Las personas ya pagan más que las empresas, aunque todavía lejos del patrón OCDE.' : 'La proporción alcanzó o superó el patrón OCDE.');
+}
+['sMEmp','sMPer'].forEach(function(id){$(id).addEventListener('input',anomalia);});anomalia();
+
+/* ---------------- nómina ---------------- */
+function nomina(){
+  var w=+$('nSal').value, tau=+$('sTau').value/100, esc=$('nEsc').value, eta=+$('sEta').value, n=Math.max(1,+$('nTrab').value);
+  $('vTau').textContent=nf1.format(tau*100)+' %';$('vEta').textContent=nf1.format(eta);
+  $('ctrlEta').style.display = esc==='emp' ? 'block':'none';
+  var h='',t='';
+  if(esc==='abs'){var costo=w*(1+tau);
+    h=kpi(pesos(w),'Salario del trabajador')+kpi(pesos(costo),'Costo mensual para el empleador','r')+kpi(pesos((costo-w)*n),'Menor utilidad mensual de la empresa','r')+kpi(nf0.format(n),'Empleos');
+    t='El empleador absorbe todo el aporte: el salario se mantiene y la carga recae en la utilidad. Es más probable cuando la empresa no puede ajustar salarios ni empleo en el corto plazo, o cuando compite por trabajadores escasos.';}
+  if(esc==='sal'){var w2=w/(1+tau);
+    h=kpi(pesos(w),'Costo mensual para el empleador')+kpi(pesos(w2),'Salario bruto al que tiende','r')+kpi(pesos(w-w2),'Lo que soporta el trabajador cada mes','r')+kpi(nf0.format(n),'Empleos');
+    t='Con oferta de trabajo poco elástica, los aumentos salariales se moderan hasta que el costo total vuelve al nivel inicial. La ley pone el aporte en el empleador y la carga termina en el trabajador. Requiere que el salario tenga margen para bajar o crecer menos.';}
+  if(esc==='emp'){var costo2=w*(1+tau), n2=n*Math.pow(1+tau,-eta);
+    h=kpi(pesos(w),'Salario (no puede bajar)')+kpi(pesos(costo2),'Costo mensual para el empleador','r')+kpi(nf1.format(n2),'Empleos formales después del ajuste','r')+kpi(nf1.format(n-n2),'Empleos formales que se pierden','r');
+    t='Cuando el salario está en el piso legal, el mayor costo no se puede trasladar al salario y el ajuste llega por menos empleo formal o más informalidad. La pérdida depende de qué tan sensible sea la demanda de trabajo al costo laboral.';}
+  $('kNomina').innerHTML=h;$('textoNomina').textContent=t;
+}
+['nSal','sTau','nEsc','sEta','nTrab'].forEach(function(id){$(id).addEventListener('input',nomina);});nomina();
+
+/* ---------------- tabaco ---------------- */
+function recaudoTab(T,eps){var P0=10000,Q0=10,P1=P0+(T-2000);var Q1=Q0*Math.pow(P1/P0,-eps);return {Q:Q1,R:T*Q1/1000,P:P1};}
+function tabaco(){
+  var T=+$('sImp').value,eps=+$('sEps').value;$('vImp').textContent=pesos(T);$('vEps').textContent=nf2.format(eps);
+  var r=recaudoTab(T,eps);
+  $('kTabaco').innerHTML=kpi(pesos(r.P),'Nuevo precio por cajetilla')+kpi(nf2.format(r.Q)+' M','Cajetillas al año')+kpi(cambio((r.Q/10-1)*100,1),'Cambio en el consumo',r.Q<10?'g':'')+kpi('$'+nf0.format(r.R*1000)+' M','Recaudo anual',r.R>=20?'g':'r');
+  var t = r.R>=20 ? 'El recaudo sube frente a los $20.000 millones iniciales y el consumo cae '+nf1.format((1-r.Q/10)*100)+' %. Si los consumidores responden poco, el impuesto recauda más y protege poco la salud.' : 'El recaudo cae por debajo de los $20.000 millones iniciales: la política sanitaria funciona y el fisco pierde. Es la paradoja del tabaco.';
+  $('textoTabaco').textContent=t;
+  dibujarTabaco(T,eps);
+}
+function dibujarTabaco(T,eps){
+  var svg=$('graficoTabaco');while(svg.firstChild)svg.removeChild(svg.firstChild);
+  var L=60,R=505,Tp=18,B=285;var pts=[],ymax=60;
+  for(var v=2000;v<=8000;v+=100){var rr=recaudoTab(v,eps).R;pts.push([v,rr]);if(rr>ymax)ymax=Math.ceil(rr/10)*10;}
+  function X(v){return L+(v-2000)/6000*(R-L);} function Y(v){return B-v/ymax*(B-Tp);}
+  var paso=ymax>60?20:10;
+  for(var y=0;y<=ymax;y+=paso){svg.appendChild(S('line',{x1:L,y1:Y(y),x2:R,y2:Y(y),stroke:'#eee'}));svg.appendChild(S('text',{x:L-6,y:Y(y)+4,'font-size':11,'text-anchor':'end',fill:'#666'},nf0.format(y*1000)));}
+  [2000,3000,4000,5000,6000,7000,8000].forEach(function(v){svg.appendChild(S('text',{x:X(v),y:B+16,'font-size':11,'text-anchor':'middle',fill:'#666'},'$'+nf0.format(v)));});
+  svg.appendChild(S('line',{x1:L,y1:B,x2:R,y2:B,stroke:'#555'}));svg.appendChild(S('line',{x1:L,y1:Tp,x2:L,y2:B,stroke:'#555'}));
+  svg.appendChild(S('text',{x:R,y:B+32,'font-size':12,'text-anchor':'end',fill:'#333'},'Impuesto por cajetilla'));
+  svg.appendChild(S('text',{x:L,y:Tp-4,'font-size':12,fill:'#333'},'Recaudo (millones)'));
+  svg.appendChild(S('line',{x1:L,y1:Y(20),x2:R,y2:Y(20),stroke:'#888','stroke-dasharray':'5 4'}));
+  svg.appendChild(S('polyline',{points:pts.map(function(p){return X(p[0])+','+Y(p[1]);}).join(' '),fill:'none',stroke:'#2F467A','stroke-width':2.5}));
+  var r=recaudoTab(T,eps);svg.appendChild(S('circle',{cx:X(T),cy:Y(r.R),r:5,fill:r.R>=20?'#3CA05A':'#DC5050'}));
+}
+['sImp','sEps'].forEach(function(id){$(id).addEventListener('input',tabaco);});
+document.querySelectorAll('[data-eps]').forEach(function(b){b.addEventListener('click',function(){$('sImp').value=4000;$('sEps').value=b.getAttribute('data-eps');tabaco();});});
+tabaco();
+
+/* ---------------- territorio: Musgrave ---------------- */
+var NIVELES=['Nación','Municipio','Departamento, región o esquema asociativo'];
+var MUSG=[
+ {e:'Aumentar el gasto para sacar a la economía de una recesión.', r:0, x:'Estabilización. El estímulo de un municipio se filtra a los vecinos por las compras, y el municipio no controla la política monetaria.'},
+ {e:'Transferencias monetarias a hogares pobres financiadas con un impuesto progresivo.', r:0, x:'Distribución. Si un municipio grava fuerte a los ricos para subsidiar a los pobres, unos se van y otros llegan hasta agotar la base.'},
+ {e:'Devolver el IVA a los hogares de los deciles más bajos.', r:0, x:'Distribución, y además depende del IVA, que es un impuesto nacional de base móvil.'},
+ {e:'El alumbrado público de un barrio.', r:1, x:'Asignación de un bien con beneficio local: buen candidato para la provisión municipal.'},
+ {e:'Una cancha de barrio.', r:1, x:'Beneficio local. El teorema de Oates favorece que lo decida quien conoce mejor las preferencias de sus residentes.'},
+ {e:'La descontaminación de una cuenca que atraviesa varios municipios.', r:2, x:'El beneficio se desborda. Si lo decide un solo municipio, invertirá menos de lo necesario. Corporaciones autónomas regionales y esquemas asociativos responden a ese problema.'},
+ {e:'Un hospital de alta complejidad.', r:2, x:'Atiende a habitantes de muchos municipios: el principio de correspondencia lo ubica en un nivel superior al municipal.'},
+ {e:'La defensa nacional.', r:0, x:'Beneficia a todo el país: corresponde a la Nación.'}
+];
+var acM=0,reM=0;
+(function(){
+  var h='';MUSG.forEach(function(it,i){h+='<div class="caso" data-i="'+i+'"><div class="enun">'+esc(it.e)+'</div><div class="chips">'+NIVELES.map(function(nv,k){return '<button data-k="'+k+'">'+nv+'</button>';}).join('')+'</div><div class="fb"></div></div>';});
+  $('juegoMusgrave').innerHTML=h;
+  $('juegoMusgrave').querySelectorAll('.caso').forEach(function(div){var i=+div.getAttribute('data-i'),hecho=false;
+    div.querySelectorAll('.chips button').forEach(function(b){b.addEventListener('click',function(){if(hecho)return;hecho=true;reM++;
+      var k=+b.getAttribute('data-k'),ok=k===MUSG[i].r;if(ok){acM++;b.classList.add('ok');}else{b.classList.add('mal');div.querySelector('.chips button[data-k="'+MUSG[i].r+'"]').classList.add('ok');}
+      var fb=div.querySelector('.fb');fb.className='fb show '+(ok?'ok':'mal');fb.innerHTML='<b>'+(ok?'Correcto.':'Lo esperado: '+NIVELES[MUSG[i].r]+'.')+'</b> '+esc(MUSG[i].x);
+      $('marcadorMusgrave').textContent='Aciertos: '+acM+' de '+reM;});});});
+})();
+
+/* ---------------- territorio: barras y simulador ---------------- */
+(function(){
+  var D=[['Cerveza',17.3,1],['Estampillas',14.2,0],['Vehículos',12.8,0],['Licores',11.7,1],['Registro',11.0,0],['Tabaco y cigarrillos',7.7,1],['Monopolio de licores',7.4,1],['Otras fuentes',17.9,0]];
+  $('barrasDeptos').innerHTML=D.map(function(d){return '<div class="barrow"><span>'+d[0]+'</span><div class="bar" style="width:'+(d[1]/17.9*100)+'%;background:'+(d[2]?'var(--rojo)':'var(--azul-medio)')+'"></div><span class="v">'+nf1.format(d[1])+' %</span></div>';}).join('')+'<p class="muted">En rojo, las fuentes ligadas al consumo.</p>';
+})();
+function depto(){
+  var dc=+$('sCons').value/100, dt=+$('sTransf').value/100;
+  $('vCons').textContent=cambio(dc*100);$('vTransf').textContent=cambio(dt*100);
+  var tr=56.9*(1+dt), consumo=26.6*0.441*(1+dc), otrosImp=26.6*(1-0.441), otros=16.3;
+  var total=tr+consumo+otrosImp+otros, dep=tr/total*100, propios=(consumo+otrosImp+otros);
+  $('kDepto').innerHTML=kpi(nf1.format(total),'Ingresos totales (base 100)')+kpi(nf1.format(consumo),'Recaudo ligado al consumo',dc<0?'r':'')+kpi(pct(dep),'Dependencia de transferencias',dep>56.9?'r':'g')+kpi(nf1.format(propios),'Recursos propios');
+  var t='La dependencia de transferencias pasa de 56,9 % a '+pct(dep)+'. ';
+  if(dep>50) t+='Sigue por encima del umbral de 50 % que el Ministerio de Hacienda considera alta dependencia. ';
+  t+='Para saber hacia dónde se mueve el recaudo ligado al consumo hace falta la elasticidad: una tarifa más alta con consumo que cae poco puede subirlo, y una caída fuerte del consumo, sumada al contrabando, puede bajarlo. Fíjate también en que las transferencias tampoco están quietas.';
+  $('textoDepto').textContent=t;
+}
+['sCons','sTransf'].forEach(function(id){$(id).addEventListener('input',depto);});depto();
+
+/* ---------------- situaciones ---------------- */
+var QUIZ=[
+ {e:'Un concejal propone un cobro en la factura del gas "por el servicio de vigilancia ciudadana", que pagan todos los usuarios según su consumo. ¿Cómo debe analizarse?', o:['Como tasa, porque la norma lo llama así y menciona un servicio','Mirando el hecho generador: si es consumir gas, el cobro se comporta como tributo no vinculado','Como precio público, porque va en una factura de servicios'], r:1, x:'La clasificación atiende a la sustancia. Si la actuación estatal no está en el hecho generador, el nombre de tasa no la convierte en tasa.'},
+ {e:'En un mercado competitivo, la ley cambia el obligado de un impuesto por unidad: ahora lo paga el comprador en lugar del vendedor. ¿Qué pasa con el reparto de la carga?', o:['Pasa a soportarlo todo el comprador','Queda igual: el reparto depende de las elasticidades','Pasa a soportarlo todo el vendedor'], r:1, x:'Primera proposición de Stiglitz: la etiqueta legal es indiferente. Puedes comprobarlo en el simulador de la pestaña Incidencia.'},
+ {e:'Alguien con renta gravable de $100 millones al año queda en el tramo de 28 %. ¿Qué parte de su renta paga en impuesto con la tabla vigente?', o:['28 %','Cerca de 9 %','19 %'], r:1, x:'La tarifa marginal se aplica solo al último tramo. La tarifa media, lo que pagó dividido por su renta, es cerca de 9,1 %.'},
+ {e:'Ana gana $10 millones al mes de salario y Bruno $10 millones en dividendos. Bruno paga mucho menos impuesto. ¿Qué principio se rompe en primer lugar?', o:['Equidad horizontal','Eficiencia administrativa','Irretroactividad'], r:0, x:'Personas con igual capacidad pagan distinto según el origen de su ingreso.'},
+ {e:'Una exención de IVA abarata el arroz para todos. ¿Qué hogares reciben más subsidio en pesos?', o:['Los más pobres, porque el arroz es básico','Los de mayores ingresos, porque el subsidio se reparte en proporción al consumo','Todos reciben lo mismo'], r:1, x:'Es la paradoja de las exenciones: el decil más rico concentra un tercio del gasto en bienes exentos y el más pobre el 3 %.'},
+ {e:'¿Cuál de estos cobros es menos visible para quien termina soportándolo?', o:['La retención en la fuente que aparece en el desprendible','El aporte del empleador a salud sobre la nómina','El predial que llega en un recibo anual'], r:1, x:'El trabajador ve su propio descuento y no ve el aporte del empleador, aunque encarezca su contratación. Es un caso de ilusión fiscal.'},
+ {e:'Se duplica el impuesto a los vapeadores y la demanda es muy sensible al precio. ¿Qué es lo más probable?', o:['El recaudo se duplica','El consumo cae mucho y el recaudo puede caer','No cambia nada porque el impuesto lo paga el productor'], r:1, x:'Paradoja del tabaco: con demanda elástica, el éxito sanitario reduce la base y el recaudo.'},
+ {e:'Sube el aporte del empleador sobre la nómina de trabajadores que ganan el salario mínimo. ¿Por dónde tiende a llegar el ajuste?', o:['Por un salario más bajo','Por menos empleo formal o más informalidad','Por precios más bajos'], r:1, x:'El salario no puede bajar del mínimo legal; si no hay absorción, el ajuste llega por el empleo.'},
+ {e:'Un municipio quiere financiar subsidios generosos con un predial muy progresivo. Según Musgrave y la teoría del federalismo fiscal, ¿qué problema enfrenta?', o:['Ninguno, la redistribución es una función local','Los contribuyentes ricos pueden irse y los pobres llegar, hasta agotar la base','Viola el principio de irretroactividad'], r:1, x:'La distribución corresponde principalmente a la Nación porque la redistribución local destruye su propia base.'},
+ {e:'Bogotá financia con predial e ICA buena parte de su gasto; un municipio de sexta categoría del Chocó no puede. ¿Qué concepto describe esa diferencia?', o:['Brecha vertical','Brecha horizontal','Papel matamoscas'], r:1, x:'La brecha horizontal compara entidades del mismo nivel. La vertical compara niveles de gobierno.'},
+ {e:'Un alcalde dice: "¿para qué actualizar el catastro y pelear con los concejales si el SGP llega solo?". ¿Qué describe?', o:['Pereza fiscal','Equidad vertical','Restricción presupuestaria intertemporal'], r:0, x:'Cuando los recursos externos son automáticos y crecientes, cobrar impuestos propios solo tiene costo político.'},
+ {e:'La Nación puede entregar $1.000 millones a un municipio como rebaja de impuestos a sus residentes o como giro a la alcaldía. ¿Qué predice el efecto papel matamoscas?', o:['El gasto local sube igual en los dos casos','El gasto local sube mucho más con el giro a la alcaldía','El gasto local sube más con la rebaja'], r:1, x:'El dinero se queda pegado donde cae: llega ya en manos de quien lo gasta.'},
+ {e:'Una ley nacional sube el impuesto al consumo de cerveza y el consumo cae con fuerza. Si las transferencias no cambian, ¿qué pasa con la dependencia de los departamentos?', o:['Disminuye','Aumenta','No cambia porque la cerveza es un impuesto nacional'], r:1, x:'El impuesto al consumo de cerveza es departamental. Si cae su recaudo y las transferencias se mantienen, las transferencias pesan más en el total. Prueba el simulador de la pestaña Territorio.'},
+ {e:'¿Puede la Corte declarar inconstitucional el IVA solo porque es regresivo?', o:['Sí, porque el artículo 363 exige progresividad','En principio no: la Corte entiende que los principios se predican del sistema en su conjunto','Sí, si lo pide un gremio'], r:1, x:'Un impuesto puede ser regresivo dentro de un sistema que, en conjunto, respete la equidad y la progresividad. El debate se traslada al terreno político.'},
+ {e:'Si un estudio mostrara que el impuesto de renta de las sociedades se traslada casi todo a precios, ¿qué implicaría para la anomalía colombiana?', o:['Que el sistema es más progresivo de lo que parece','Que el sistema es menos progresivo de lo que parece, porque la carga recae en hogares de todos los ingresos','Nada, porque la incidencia legal es la que cuenta'], r:1, x:'Si recae en accionistas, la anomalía es una etiqueta; si se traslada a consumidores y trabajadores, la progresividad aparente se debilita.'},
+ {e:'¿Por qué el Gobierno necesitaba que la ley estuviera vigente antes del 1 de enero de 2027?', o:['Por la regla fiscal','Por la irretroactividad: los cambios en impuestos de período como la renta solo rigen desde el período siguiente','Porque el IVA solo cambia en enero'], r:1, x:'La renta es un impuesto de período. El IVA es instantáneo y puede cambiar desde la fecha que la ley disponga.'},
+ {e:'Los intereses de la deuda en el PGN 2027 superan la inversión pública. ¿Qué concepto conecta ese dato con la Ley de Rescate?', o:['Restricción presupuestaria intertemporal','Equidad horizontal','Principio de correspondencia'], r:0, x:'Los déficits de hoy se pagan con superávits futuros: más impuestos, menos gasto o ambos. La deuda acumulada ya pesa sobre el presupuesto.'},
+ {e:'El Gobierno retiró el IVA a los agroinsumos después de presiones en el primer debate. ¿Qué herramienta explica mejor quién se movilizó?', o:['Beneficios concentrados y costos difusos','Tarifa marginal','Teorema de Oates'], r:0, x:'Los productores perciben con claridad la incidencia legal y están organizados; los beneficiarios del recaudo están dispersos.'}
+];
+var qResp=0,qAc=0;
+function pintarQuiz(){qResp=0;qAc=0;actualizarMarcadorQuiz();pintarPreguntas($('quiz'),QUIZ,function(ok){qResp++;if(ok)qAc++;actualizarMarcadorQuiz();});
+  $('quiz').querySelectorAll('.caso .enun').forEach(function(e,i){e.textContent=(i+1)+'. '+e.textContent;});}
+function actualizarMarcadorQuiz(){$('marcadorQuiz').textContent='Respondidas: '+qResp+' de '+QUIZ.length+' · Aciertos: '+qAc;}
+$('reiniciarQuiz').addEventListener('click',pintarQuiz);
+pintarQuiz();
+
+/* ---------------- arranque ---------------- */
+abrir(location.hash.slice(1)||'inicio');
+})();
+</script>
+</body>
+</html>
